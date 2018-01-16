@@ -1,4 +1,6 @@
 import scrapy
+from scraper.items import Apartment
+from scrapy.loader import ItemLoader
 
 
 class ApartmentSpider(scrapy.Spider):
@@ -25,17 +27,21 @@ class ApartmentSpider(scrapy.Spider):
             yield scrapy.Request(url=next_url, callback=self.results_page)
 
     def apartment_page(self, response):
-        yield {
-            'id': response.css('li[class^="currentCrumb"] > span::text').extract_first(),
-            'url': response.url,
-            'date': response.css('div[class^="datePosted"] > time::attr(datetime)').extract_first(),
-            'title': response.css('title::text').extract_first(),
-            'headline': response.css("h1[class^='title']::text").extract_first(),
-            'address': response.css("span[class^='address']::text").extract_first(),
-            'price': response.css('span[class^="currentPrice"] > span::text').extract_first(),
-            'description': response.css('div[class^="descriptionContainer"] > div').extract_first(),
-            'bathrooms':  response.css('#AttributeList li:nth-of-type(1) dd::text').extract_first(),
-            'furnished':  response.css('#AttributeList li:nth-of-type(2) dd::text').extract_first(),
-            'animals':  response.css('#AttributeList li:nth-of-type(3) dd::text').extract_first(),
-            'main_image_url': response.css('meta[property~="og:image"]::attr(content)').extract_first(),
-        }
+        l = ItemLoader(item=Apartment(), response=response)
+        l.default_output_processor = scrapy.loader.processors.TakeFirst()
+
+        l.add_value('url', response.url)
+        l.add_css('main_image_url', 'meta[property~="og:image"]::attr(content)')
+        l.add_css('headline', "h1[class^='title']::text")
+        l.add_css('description', 'div[class^="descriptionContainer"] > div')
+
+        l.add_css('raw_id', 'li[class^="currentCrumb"] > span::text')
+        l.add_css('raw_date', 'div[class^="datePosted"] > time::attr(datetime)')
+        l.add_css('raw_title', 'title::text')
+        l.add_css('raw_address', "span[class^='address']::text")
+        l.add_css('raw_price', 'span[class^="currentPrice"] > span::text')
+        l.add_css('raw_bathrooms', '#AttributeList li:nth-of-type(1) dd::text')
+        l.add_css('raw_furnished', '#AttributeList li:nth-of-type(2) dd::text')
+        l.add_css('raw_animals', '#AttributeList li:nth-of-type(3) dd::text')
+
+        return l.load_item()
