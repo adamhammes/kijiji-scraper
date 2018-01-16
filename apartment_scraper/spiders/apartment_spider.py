@@ -6,7 +6,7 @@ class ApartmentSpider(scrapy.Spider):
     name = "apartments"
 
     def start_requests(self):
-        urls = ['https://www.kijiji.ca/b-appartement-condo/ville-de-quebec/c37l1700124']
+        urls = ['https://www.kijiji.ca/b-appartement-condo/ville-de-quebec/c37l1700124?ad=offering']
 
         for url in urls:
             yield scrapy.Request(url=url, callback=self.results_page)
