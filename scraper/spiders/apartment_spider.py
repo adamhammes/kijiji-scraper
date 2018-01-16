@@ -27,12 +27,15 @@ class ApartmentSpider(scrapy.Spider):
     def apartment_page(self, response):
         yield {
             'id': response.css('li[class^="currentCrumb"] > span::text').extract_first(),
+            'url': response.url,
             'date': response.css('div[class^="datePosted"] > time::attr(datetime)').extract_first(),
-            'title': response.css("h1[class^='title']::text").extract_first(),
+            'title': response.css('title::text').extract_first(),
+            'headline': response.css("h1[class^='title']::text").extract_first(),
             'address': response.css("span[class^='address']::text").extract_first(),
             'price': response.css('span[class^="currentPrice"] > span::text').extract_first(),
             'description': response.css('div[class^="descriptionContainer"] > div').extract_first(),
             'bathrooms':  response.css('#AttributeList li:nth-of-type(1) dd::text').extract_first(),
             'furnished':  response.css('#AttributeList li:nth-of-type(2) dd::text').extract_first(),
+            'animals':  response.css('#AttributeList li:nth-of-type(3) dd::text').extract_first(),
             'main_image_url': response.css('meta[property~="og:image"]::attr(content)').extract_first(),
         }
