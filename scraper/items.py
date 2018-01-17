@@ -8,6 +8,7 @@ class Apartment(scrapy.Item):
     headline = scrapy.Field()
     description = scrapy.Field()
     title = scrapy.Field()
+    date_accessed = scrapy.Field() # datetime
 
     # Unvalidated/unprocessed
     raw_id = scrapy.Field()

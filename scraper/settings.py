@@ -67,6 +67,7 @@ ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
     'scraper.pipelines.validation.ValidationPipeline': 200,
     'scraper.pipelines.geocoder.GeocoderPipeline': 600,
+    'scraper.pipelines.amazon_csv.AmazonS3Pipeline': 900,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

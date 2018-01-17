@@ -1,3 +1,5 @@
+import datetime
+
 import scrapy
 from scraper.items import Apartment
 from scrapy.loader import ItemLoader
@@ -35,6 +37,7 @@ class ApartmentSpider(scrapy.Spider):
         l.add_css('headline', "h1[class^='title']::text")
         l.add_css('description', 'div[class^="descriptionContainer"] > div')
         l.add_css('title', 'title::text')
+        l.add_value('date_accessed', datetime.datetime.now())
 
         l.add_css('raw_id', 'li[class^="currentCrumb"] > span::text')
         l.add_css('raw_date', 'div[class^="datePosted"] > time::attr(datetime)')
