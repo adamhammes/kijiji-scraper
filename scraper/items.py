@@ -31,7 +31,11 @@ class Apartment(scrapy.Item):
     # Synthesized fields
     has_exact_address = scrapy.Field()
     address_confidence = scrapy.Field()
+    address_accuracy = scrapy.Field()
+    address = scrapy.Field()
     latitude = scrapy.Field()
     longitude = scrapy.Field()
+    postal = scrapy.Field()
     city = scrapy.Field()
+
     num_rooms = scrapy.Field()
