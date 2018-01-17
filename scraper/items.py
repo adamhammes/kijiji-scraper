@@ -7,11 +7,11 @@ class Apartment(scrapy.Item):
     main_image_url = scrapy.Field()
     headline = scrapy.Field()
     description = scrapy.Field()
+    title = scrapy.Field()
 
     # Unvalidated/unprocessed
     raw_id = scrapy.Field()
     raw_date = scrapy.Field()
-    raw_title = scrapy.Field()
     raw_address = scrapy.Field()
     raw_price = scrapy.Field()
     raw_bathrooms = scrapy.Field()
@@ -19,23 +19,20 @@ class Apartment(scrapy.Item):
     raw_animals = scrapy.Field()
 
     # Validated fields
-    id = scrapy.Field()
-    date = scrapy.Field()
-    title = scrapy.Field()
-    address = scrapy.Field()
-    price = scrapy.Field()
+    id = scrapy.Field() # int
+    date = scrapy.Field() # datetime
+    price = scrapy.Field() # integer (in cents) - nullable in the case of "on demand"
     num_bathrooms = scrapy.Field()
     is_furnished = scrapy.Field()
-    allows_animals = scrapy.Field()
+    allows_animals = scrapy.Field() # nullable
 
     # Synthesized fields
-    has_exact_address = scrapy.Field()
-    address_confidence = scrapy.Field()
-    address_accuracy = scrapy.Field()
+    address_confidence = scrapy.Field() # int
+    address_accuracy = scrapy.Field() # string
     address = scrapy.Field()
-    latitude = scrapy.Field()
-    longitude = scrapy.Field()
-    postal = scrapy.Field()
+    latitude = scrapy.Field() # float
+    longitude = scrapy.Field() # float
+    postal = scrapy.Field() # string
     city = scrapy.Field()
 
-    num_rooms = scrapy.Field()
+    num_rooms = scrapy.Field() # float (e.g. 4.5)

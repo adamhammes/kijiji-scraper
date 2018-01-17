@@ -34,10 +34,10 @@ class ApartmentSpider(scrapy.Spider):
         l.add_css('main_image_url', 'meta[property~="og:image"]::attr(content)')
         l.add_css('headline', "h1[class^='title']::text")
         l.add_css('description', 'div[class^="descriptionContainer"] > div')
+        l.add_css('title', 'title::text')
 
         l.add_css('raw_id', 'li[class^="currentCrumb"] > span::text')
         l.add_css('raw_date', 'div[class^="datePosted"] > time::attr(datetime)')
-        l.add_css('raw_title', 'title::text')
         l.add_css('raw_address', "span[class^='address']::text")
         l.add_css('raw_price', 'span[class^="currentPrice"] > span::text')
         l.add_css('raw_bathrooms', '#AttributeList li:nth-of-type(1) dd::text')

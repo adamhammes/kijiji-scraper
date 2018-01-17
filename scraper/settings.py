@@ -65,6 +65,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
+    'scraper.pipelines.validation.ValidationPipeline': 200,
     'scraper.pipelines.geocoder.GeocoderPipeline': 600,
 }
 
