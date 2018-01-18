@@ -14,7 +14,11 @@ class ValidationPipeline(object):
             raise DropItem('Already seen item (link: {})'.format(item['url']))
         
         item['id'] = int(item['raw_id'])
-        item['date'] = _read_date(item['raw_date'])
+
+        if 'raw_date' in item:
+            item['date'] = _read_date(item['raw_date'])
+        else:
+            item['raw_date'], item['date'] = None, None:
         
         if 'raw_price' in item:
             item['price'] = _read_price(item['raw_price'])

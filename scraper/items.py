@@ -12,16 +12,16 @@ class Apartment(scrapy.Item):
 
     # Unvalidated/unprocessed
     raw_id = scrapy.Field()
-    raw_date = scrapy.Field()
+    raw_date = scrapy.Field() # nullable
     raw_address = scrapy.Field()
     raw_price = scrapy.Field()
     raw_bathrooms = scrapy.Field()
     raw_furnished = scrapy.Field()
-    raw_animals = scrapy.Field()
+    raw_animals = scrapy.Field() # nullable
 
     # Validated fields
     id = scrapy.Field() # int
-    date = scrapy.Field() # datetime
+    date = scrapy.Field() # datetime, nullable
     price = scrapy.Field() # integer (in cents) - nullable in the case of "on demand"
     num_bathrooms = scrapy.Field()
     is_furnished = scrapy.Field()
