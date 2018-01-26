@@ -1,10 +1,9 @@
 import json
+import logging
 import os
 
 import geocoder
-from geocoder.google import GoogleResult
 import requests
-from scrapy import log
 from scrapy.exceptions import DropItem
 
 
@@ -20,7 +19,8 @@ class GeocoderPipeline(object):
                 self.cache = json.loads(f.read())
         except FileNotFoundError:
             self.cache = {}
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as err:
+            logging.error('Couldn\'t decode geocoder cache:\n{}'.format(err))
             self.cache = {}
 
         self.session = requests.session()
