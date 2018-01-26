@@ -48,3 +48,4 @@ class ApartmentSpider(scrapy.Spider):
         l.add_css('raw_animals', '#AttributeList li:nth-of-type(3) dd::text')
 
         return l.load_item()
+
