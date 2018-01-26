@@ -1,4 +1,13 @@
+# Python stuff
 *.py[cod]
 __pycache__/
 venv/
 
+# Scrapy stuff
+.scrapy/
+
+# Output files
+*.csv
+*.log
+*.txt
+*.json
