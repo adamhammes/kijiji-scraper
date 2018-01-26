@@ -3,6 +3,10 @@ import fractions
 import re
 
 from scrapy.exceptions import DropItem
+from scraper.items import Apartment
+
+
+FIELD_NAMES = Apartment.fields.keys()
 
 
 class ValidationPipeline(object):
@@ -12,32 +16,36 @@ class ValidationPipeline(object):
     def process_item(self, item, spider):
         if item['raw_id'] in self.cache:
             raise DropItem('Already seen item (link: {})'.format(item['url']))
+
+        self.cache.add(item['raw_id'])
+
+        # Set all missing fields to None
+        for key in FIELD_NAMES:
+            item.setdefault(key, None)
+
         
         item['id'] = int(item['raw_id'])
-
-        if 'raw_date' in item:
-            item['date'] = _read_date(item['raw_date'])
-        else:
-            item['raw_date'], item['date'] = None, None
-        
-        if 'raw_price' in item:
-            item['price'] = _read_price(item['raw_price'])
-        else:
-            item['raw_price'], item['price']  = None, None
-
+        item['date'] = _read_date(item['raw_date'])
+        item['price'] = _read_price(item['raw_price'])
         item['num_bathrooms'] = _read_bathrooms(item['raw_bathrooms'])
         item['is_furnished'] = _read_furnished(item['raw_furnished'])
-
-        if 'raw_animals' in item:
-            item['allows_animals'] = _read_animals(item['raw_animals'])
-        else:
-            item['raw_animals'], item['allows_animals'] = None, None
-
+        item['allows_animals'] = _read_animals(item['raw_animals'])
         item['num_rooms'] = _read_num_rooms(item['title'])
 
         return item
 
 
+def nullable(func, *args, **kw):
+    def wrapped(*args, **kw):
+        if args[0] is None:
+            return None
+
+        return func(*args, **kw)
+
+    return wrapped
+
+
+@nullable
 def _read_date(raw_date):
     date_format = '%Y-%m-%dT%H:%M:%S'
 
@@ -45,10 +53,8 @@ def _read_date(raw_date):
     return datetime.strptime(relevant, date_format)
 
 
+@nullable
 def _read_price(raw_price):
-    if not raw_price:
-        return None
-
     valid_chars = '0123456789,'
     valid_price = ''.join(c for c in raw_price if c in valid_chars)
 
@@ -63,6 +69,8 @@ def _read_price(raw_price):
 
     return dollars * 100 + cents
 
+
+@nullable
 def _read_bathrooms(raw_bathrooms):
     bathroom_re = re.compile(r'(\d+)(,5)?')
     match = bathroom_re.search(raw_bathrooms)
@@ -77,18 +85,20 @@ def _read_bathrooms(raw_bathrooms):
     return val
 
 
+@nullable
 def _read_furnished(raw_furnished):
     return 'Oui' in raw_furnished
 
 
+@nullable
 def _read_animals(raw_animals):
-    if not raw_animals:
-        return None
-
     return 'Oui' in raw_animals
 
+
+@nullable
 def _read_num_rooms(title):
     raw = title.split(' | ')[-3]
     parts = raw.split(' ')[:2]
 
     return float(sum(fractions.Fraction(part) for part in parts))
+
