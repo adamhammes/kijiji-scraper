@@ -85,16 +85,22 @@ def trimmed_json(items):
     ]
 
     trimmed_items = []
-    for item in items:
+    for item in filter(_makes_the_cut, items):
         assert [field in item for field in retained_keys]
+
         trimmed_items.append({key: item[key] for key in retained_keys})
     
     file_name = os.path.join(OUTPUT_DIRECTORY, 'trimmed_values.json')
     with open(file_name, 'w') as f:
-        f.write(json.dumps(trimmed_items, default=json_serial)) 
+        f.write(json.dumps(trimmed_items, default=_json_serial)) 
 
 
-def json_serial(obj):
+def _makes_the_cut(item):
+    return item['address_confidence'] >= 9 \
+       and item['address_accuracy'] == 'ROOFTOP'
+
+
+def _json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
     raise TypeError("Type {} is not serializable".format(type(obj)))

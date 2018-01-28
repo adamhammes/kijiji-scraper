@@ -43,7 +43,7 @@ class GeocoderPipeline(object):
                 .format(geocode.status))
 
         new_fields = {
-            'address_confidence': geocode.confidence,
+            'address_confidence': int(geocode.confidence),
             'address_accuracy': geocode.accuracy,
             'address': geocode.address,
             'postal': geocode.postal,
