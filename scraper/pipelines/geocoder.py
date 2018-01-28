@@ -7,7 +7,19 @@ import requests
 from scrapy.exceptions import DropItem
 
 
+ITEMS_GEOCODED = 'num_items_geocoded'
+GEOCODE_HIT = 'geocode_cache_hits'
+GEOCODE_MISS = 'geocode_cache_misses'
+
+
 class GeocoderPipeline(object):
+    def __init__(self, stats):
+        self.stats = stats
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler.stats)
+
     def open_spider(self, spider):
         self.api_key = os.environ['GOOGLE_GEOCODER_KEY']
         output_dir = os.environ['KIJIJI_OUTPUT_DIRECTORY']
@@ -25,13 +37,20 @@ class GeocoderPipeline(object):
 
         self.session = requests.session()
 
+        self.stats.set_value(ITEMS_GEOCODED , 0)
+        self.stats.set_value(GEOCODE_HIT , 0)
+        self.stats.set_value(GEOCODE_MISS , 0)
+
     def process_item(self, item, spider):
+        self.stats.inc_value(ITEMS_GEOCODED)
         raw_address = item['raw_address']
 
         if raw_address in self.cache:
+            self.stats.inc_value(GEOCODE_HIT)
             item.update(self.cache[raw_address])
             return item
 
+        self.stats.inc_value(GEOCODE_MISS)
         geocode = geocoder.google(
             raw_address,
             key=self.api_key,
@@ -47,8 +66,8 @@ class GeocoderPipeline(object):
             'address_accuracy': geocode.accuracy,
             'address': geocode.address,
             'postal': geocode.postal,
-            'latitude': geocode.latlng[0],
-            'longitude': geocode.latlng[1],
+            'latitude': float(geocode.latlng[0]),
+            'longitude': float(geocode.latlng[1]),
             'city': geocode.city,
         }
 
