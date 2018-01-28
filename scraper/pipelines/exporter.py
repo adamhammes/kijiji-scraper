@@ -70,6 +70,7 @@ def full_csv(items):
 
 def trimmed_json(items):
     retained_keys = [
+        'address',
         'url',
         'headline',
         'description',
