@@ -11,3 +11,7 @@ venv/
 *.log
 *.txt
 *.json
+
+# Allow sample data
+!example_values.json
+
