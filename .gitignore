@@ -10,8 +10,8 @@ venv/
 *.csv
 *.log
 *.txt
-*.json
 
-# Allow sample data
-!example_values.json
+# Javascript stuff
+node_modules/
+dist/
 
