@@ -1,13 +1,13 @@
-require('leaflet.markercluster/dist/MarkerCluster.css')
-require('leaflet.markercluster/dist/MarkerCluster.Default.css')
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import './main.css';
 
-var L = require('leaflet');
-require('leaflet.markercluster');
+import L from 'leaflet';
+import 'leaflet.markercluster';
 
 import * as apartment_json from '../example_values.json';
 
 const apartments = Array.from(Object.values(apartment_json));
-console.log(apartments[0]);
 
 const quebecLocation = {
 	lat: 46.82,
@@ -17,7 +17,7 @@ const quebecLocation = {
 const minZoom = 9;
 const defaultZoom = minZoom + 2
 
-const map = L.map('mapId').setView(quebecLocation, defaultZoom);
+const map = L.map('mapContainer').setView(quebecLocation, defaultZoom);
 
 const accessToken = 'pk.eyJ1IjoiYWRhbWhhbW1lcyIsImEiOiJjamQxczNrajQyd25kMndvNWR6cGdqYWl2In0.30k-mIhdJr0otiiSv8mQ-w';
 
@@ -29,7 +29,8 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(map);
 
 const apartment_cluster = L.markerClusterGroup({
-	disableClusteringAtZoom: 15
+	disableClusteringAtZoom: 15,
+	spiderfyOnMaxZoom: false
 });
 
 const apartment_markers = apartments.filter(apartment => {
