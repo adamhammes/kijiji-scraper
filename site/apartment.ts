@@ -2,7 +2,7 @@ declare function require(path: string): any;
 
 const apartment_json = require('../example_values.json');
 
-interface Apartment {
+export interface Apartment {
   id: string,
   address: string,
   url: string,
