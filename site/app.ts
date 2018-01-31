@@ -2,12 +2,10 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import './main.css';
 
-import L from 'leaflet';
+import * as L from 'leaflet';
 import 'leaflet.markercluster';
 
-import * as apartment_json from '../example_values.json';
-
-const apartments = Array.from(Object.values(apartment_json));
+import apartments from './apartment';
 
 const quebecLocation = {
 	lat: 46.82,
@@ -48,7 +46,7 @@ const apartment_markers = apartments.filter(apartment => {
 
 	marker.bindPopup(popup);
 	return marker;	
-})
+});
 
 apartment_cluster.addLayers(apartment_markers);
 map.addLayer(apartment_cluster);

@@ -9,6 +9,8 @@
     "build": "webpack"
   },
   "dependencies": {
+    "@types/leaflet": "^1.2.5",
+    "@types/leaflet.markercluster": "^1.0.2",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
@@ -21,6 +23,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "style-loader": "^0.20.1",
+    "ts-loader": "^3.4.0",
+    "typescript": "^2.6.2",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1"
   }
