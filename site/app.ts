@@ -6,6 +6,7 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 
 import apartments from './apartment';
+import { genPopupContent } from './popup';
 
 const quebecLocation = {
 	lat: 46.82,
@@ -36,14 +37,10 @@ const apartment_markers = apartments.filter(apartment => {
 }).map(apartment => {
 	const marker = L.marker([apartment.latitude, apartment.longitude]);
 
-	const title = apartment.headline;
-	const link = apartment.url;
-	const popupText = `<h3><a target="_blank" href="${link}">${title}</a></h2>${apartment.description}`;
-
+	const popupContent = genPopupContent(apartment);
 	const popup = L.popup({
 		maxHeight: 250
-	}).setContent(popupText);
-
+	}).setContent(popupContent);
 	marker.bindPopup(popup);
 	return marker;	
 });
