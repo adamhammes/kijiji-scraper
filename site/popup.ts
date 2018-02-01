@@ -1,4 +1,3 @@
-import * as L from 'leaflet'
 import { Apartment } from './apartment'
 
 export const genPopupContent = (ap: Apartment) => {

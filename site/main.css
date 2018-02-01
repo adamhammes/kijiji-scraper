@@ -19,3 +19,7 @@ html, body, #root, #mapContainer {
 #prix input {
     width: 4em;
 }
+
+.awesome-marker svg {
+    margin-top: 1em;
+}
