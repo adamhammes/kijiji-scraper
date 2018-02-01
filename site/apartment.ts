@@ -3,7 +3,7 @@ declare function require(path: string): any;
 const apartment_json = require('../example_values.json');
 
 export interface Apartment {
-  id: string,
+  id: number,
   address: string,
   url: string,
   headline: string,
@@ -17,6 +17,14 @@ export interface Apartment {
   longitude: number
 };
 
-const apartments: Array<Apartment> = Array.from(Object.values(apartment_json));
+const apartments: Map<number, Apartment> = new Map();
+
+for (let key in Object.keys(apartment_json)) {
+  const apartment: Apartment = apartment_json[key];
+
+  if (apartment.latitude != null && apartment.longitude != null) {
+    apartments.set(apartment.id, apartment);
+  }
+}
 
 export default apartments;

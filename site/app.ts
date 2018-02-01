@@ -7,6 +7,8 @@ import 'leaflet.markercluster';
 
 import apartments from './apartment';
 import { genPopupContent } from './popup';
+import { ApartmentMarker, MarkerManager } from './marker_manager';
+import { Filter } from './filter';
 
 const quebecLocation = {
 	lat: 46.82,
@@ -31,19 +33,29 @@ const apartment_cluster = L.markerClusterGroup({
 	disableClusteringAtZoom: 15,
 	spiderfyOnMaxZoom: false
 });
+map.addLayer(apartment_cluster);
 
-const apartment_markers = apartments.filter(apartment => {
-	return apartment.latitude != null || apartment.latitude != null;
-}).map(apartment => {
+const mids: Set<ApartmentMarker> = new Set();
+for (let [_, apartment] of apartments) {
 	const marker = L.marker([apartment.latitude, apartment.longitude]);
 
 	const popupContent = genPopupContent(apartment);
 	const popup = L.popup({
 		maxHeight: 250
 	}).setContent(popupContent);
-	marker.bindPopup(popup);
-	return marker;	
-});
 
-apartment_cluster.addLayers(apartment_markers);
-map.addLayer(apartment_cluster);
+	marker.bindPopup(popup);
+
+	mids.add({ apartment, marker });
+}
+
+const marker_manager = new MarkerManager(apartment_cluster, mids);
+marker_manager.displayAll();
+
+
+const apartment_set = new Set();
+for (let [_, apartment] of apartments) {
+	apartment_set.add(apartment);
+}
+
+const filter = new Filter(apartment_set, marker_manager);

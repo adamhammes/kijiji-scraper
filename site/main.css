@@ -1,3 +1,21 @@
 html, body, #root, #mapContainer {
     height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#root {
+    display: flex;
+}
+
+#sidebar {
+    padding: 0 1em;
+}
+
+#mapContainer {
+    flex-grow: 1;
+}
+
+#prix input {
+    width: 4em;
 }

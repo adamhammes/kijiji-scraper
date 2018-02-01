@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+	<title>Appartements Québec</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
@@ -9,6 +10,63 @@
 
 <body>
 	<div id="root">
+		<div id="sidebar">
+			<form>
+				<p id="prix">
+					Prix
+					<br>
+					<input autocomplete="off" name="minPrice">
+					à
+					<input autocomplete="off" name="maxPrice">
+				</p>
+				<p>
+					Nombre de chambres
+					<br>
+					<input autocomplete="off" type="checkbox" name="1.5" checked>
+					<label>1 1/2</label>
+					<br>
+					<input autocomplete="off" type="checkbox" name="2.5" checked>
+					<label>2 1/2</label>
+					<br>
+					<input autocomplete="off" type="checkbox" name="3.5" checked>
+					<label>3 1/2</label>
+					<br>
+					<input autocomplete="off" type="checkbox" name="4.5" checked>
+					<label>4 1/2</label>
+					<br>
+					<input autocomplete="off" type="checkbox" name="5.5" checked>
+					<label>5 1/2</label>
+					<br>
+					<input autocomplete="off" type="checkbox" name="6.5" checked>
+					<label>6 1/2+</label>
+				</p>
+				<p>
+					Meublé
+					<br>
+					<input name="meuble" autocomplete="off" type="radio" value="peuimporte" checked>
+					<label for="yes">Peu importe</label>
+					<br>
+					<input name="meuble" autocomplete="off" type="radio" value="oui">
+					<label for="oui">Oui</label>
+					<br>
+					<input name="meuble" autocomplete="off" type="radio" value="non">
+					<label for="non">Non</label>
+					<br>
+				<p>
+					Animaux acceptés
+					<br>
+					<input name="animaux" autocomplete="off" type="radio" value="peuimporte" checked>
+					<label for="yes">Peu importe</label>
+					<br>
+					<input name="animaux" autocomplete="off" type="radio" value="oui">
+					<label for="oui">Oui</label>
+					<br>
+					<input name="animaux" autocomplete="off" type="radio" value="non">
+					<label for="non">Non</label>
+					<br>
+				</p>
+			</form>
+		</div>
 		<div id="mapContainer"></div>
 	</div>
 </body>
