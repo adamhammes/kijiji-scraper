@@ -6,8 +6,9 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 
 import apartments from './apartment';
-import { MarkerManager } from './marker_manager';
+import { MarkerManager } from './markers/marker_manager';
 import { Filter } from './filter';
+import { Persister } from './persister';
 
 const quebecLocation = {
 	lat: 46.82,
@@ -39,7 +40,9 @@ for (let [_, apartment] of apartments) {
 	apartment_set.add(apartment);
 }
 
-const marker_manager = new MarkerManager(apartment_cluster, apartment_set);
+const persister = new Persister(apartment_set);
+const marker_manager = new MarkerManager(apartment_cluster, apartment_set, persister);
 marker_manager.displayAll();
 
-new Filter(apartment_set, marker_manager);
+const filter = new Filter(apartment_set, marker_manager);
+filter.filter();
