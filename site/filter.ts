@@ -23,7 +23,7 @@ export class Filter {
         this.marker_manager = marker_manager;
         this.all_apartments = apartments;
 
-        this.form = document.querySelector('#sidebar form');
+        this.form = document.querySelector('#settings');
         
         this.form.onchange = this.onFormChange.bind(this);
         this.form.onsubmit = (e) => e.preventDefault();

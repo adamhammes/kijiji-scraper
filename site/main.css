@@ -9,6 +9,7 @@ html, body, #root, #mapContainer {
 }
 
 #sidebar {
+    position: relative;
     padding: 0 1em;
 }
 
@@ -20,6 +21,35 @@ html, body, #root, #mapContainer {
     width: 4em;
 }
 
-.awesome-marker svg {
-    margin-top: 1em;
+#hamburger-input, .toggle {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    #root {
+        flex-direction: column;
+    }
+
+    .toggle {
+        display: block;
+        cursor: pointer;
+        text-align: right;
+        width: 100%;
+        font-size: 1.5em;
+        clear: both;
+    }
+
+    #hamburger-input:checked + label .toggle {
+        position: absolute;
+        right: .33333em;
+    }
+
+    #hamburger-input:checked + label + form {
+        display: block;
+    }
+
+    #settings {
+        display: none;
+        padding: 0;
+    }
 }
