@@ -1,10 +1,15 @@
 const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+module.exports = env => {
+  process.env.values_path = env ? env.values_path : '';
+  return {
   entry: './site/app.ts',
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js']
+	},
+	resolveLoader: {
+		modules: ['node_modules', path.resolve(__dirname, 'site/loaders')]
 	},
   output: {
 		path: path.resolve(__dirname, "dist"),
@@ -44,5 +49,6 @@ module.exports = {
 			filename: "./index.html"
 		})
 	]
+  }
 };
 
