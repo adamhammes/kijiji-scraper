@@ -35,7 +35,7 @@ class ItemCollector:
 def s3_upload(items):
     file_like = io.StringIO()
     csv_writer = csv.DictWriter(file_like, fieldnames=FIELD_NAMES)
-    
+
     csv_writer.writeheader()
     for item in items:
         csv_writer.writerow(item)
@@ -44,7 +44,7 @@ def s3_upload(items):
     date_format = '%Y-%m-%d %H%M%S.csv'
     file_name = current_date.strftime(date_format)
 
-    # For the following line of code to work, the following environment 
+    # For the following line of code to work, the following environment
     # variables need to be set:
     #
     # os.environ['AWS_ACCESS_KEY_ID']
@@ -62,7 +62,7 @@ def full_csv(items):
 
     with open(file_name, 'w') as f:
         csv_writer = csv.DictWriter(f, fieldnames=FIELD_NAMES)
-         
+
         csv_writer.writeheader()
         for item in items:
             csv_writer.writerow(item)
@@ -84,24 +84,33 @@ def trimmed_json(items):
         'num_rooms',
     ]
 
+    can_be_none = ['is_furnished', 'allows_animals']
+
     trimmed_items = []
     for item in filter(_makes_the_cut, items):
         assert [field in item for field in retained_keys]
 
+        skip = False
+        for field in retained_keys:
+            if item[field] is None and not field in can_be_none:
+                skip = True
+        
+        if skip:
+            continue
+
         trimmed_items.append({key: item[key] for key in retained_keys})
-    
+
     file_name = os.path.join(OUTPUT_DIRECTORY, 'trimmed_values.json')
     with open(file_name, 'w') as f:
-        f.write(json.dumps(trimmed_items, default=_json_serial)) 
+        f.write(json.dumps(trimmed_items, default=_json_serial))
 
 
 def _makes_the_cut(item):
     return item['address_confidence'] >= 9 \
-       and item['address_accuracy'] == 'ROOFTOP'
+        and item['address_accuracy'] == 'ROOFTOP'
 
 
 def _json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
     raise TypeError("Type {} is not serializable".format(type(obj)))
-
