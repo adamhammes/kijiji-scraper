@@ -3,7 +3,11 @@ const fs = require("fs");
 
 // To change which data is loaded, pass the --env.values_path option to webpack.
 module.exports = content => {
-  const defaultLocation = path.resolve(process.cwd(), "example_values.json");
+  const defaultLocation = path.resolve(
+    process.cwd(),
+    "latest",
+    "example_values.json"
+  );
   let jsonPath = defaultLocation;
 
   if (process.env.values_path) {
@@ -11,6 +15,7 @@ module.exports = content => {
   } else if (process.env.KIJIJI_OUTPUT_DIRECTORY) {
     const potentialLocation = path.resolve(
       process.env.KIJIJI_OUTPUT_DIRECTORY,
+      "latest",
       "trimmed_values.json"
     );
     if (fs.existsSync(potentialLocation)) {

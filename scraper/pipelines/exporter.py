@@ -1,5 +1,5 @@
 import csv
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 import io
 import json
 import os
@@ -12,6 +12,7 @@ from .makes_the_cut import makes_the_cut, RETAINED_KEYS
 
 FIELD_NAMES = list(Apartment.fields.keys())
 OUTPUT_DIRECTORY = os.environ['KIJIJI_OUTPUT_DIRECTORY']
+LATEST_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, 'latest')
 
 
 class ItemCollector:
@@ -19,9 +20,8 @@ class ItemCollector:
         self.items = []
 
         self.exporters = [
-            s3_upload,
-            full_csv,
-            trimmed_json
+            (full_csv, 'all_items.csv'),
+            (trimmed_json, 'trimmed_values.json')
         ]
 
     def process_item(self, item, _):
@@ -29,22 +29,31 @@ class ItemCollector:
         return item
 
     def close_spider(self, _):
-        for exporter in self.exporters:
-            exporter(self.items)
+        date_string = datetime_slug()
+
+        for exporter, name in self.exporters:
+            value = exporter(self.items)
+
+            latest_path = os.path.join(LATEST_DIRECTORY, name)
+            os.makedirs(os.path.dirname(latest_path), exist_ok=True)
+            with io.open(latest_path, 'w', encoding='utf-8') as f:
+                f.write(value)
+
+            time_path = os.path.join(date_string, name)
+            upload_to_s3(time_path, value)
+
+            file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
+            os.makedirs(os.path.dirname(file_time_path), exist_ok=True)
+            with io.open(file_time_path, 'w', encoding='utf-8') as f:
+                f.write(value)
 
 
-def s3_upload(items):
-    file_like = io.StringIO()
-    csv_writer = csv.DictWriter(file_like, fieldnames=FIELD_NAMES)
+def datetime_slug():
+    now = datetime.now(timezone.utc)
+    return now.strftime('%Y%m%dT%H%M%SZ')
 
-    csv_writer.writeheader()
-    for item in items:
-        csv_writer.writerow(item)
 
-    current_date = datetime.now()
-    date_format = '%Y-%m-%d %H%M%S.csv'
-    file_name = current_date.strftime(date_format)
-
+def upload_to_s3(dir, string):
     # For the following line of code to work, the following environment
     # variables need to be set:
     #
@@ -53,20 +62,19 @@ def s3_upload(items):
     s3 = boto3.resource('s3', region_name='us-east-2')
     bucket = s3.Bucket('kijiji-apartments')
 
-    backup_path = 'csv_backups/{}'.format(file_name)
-    payload = file_like.getvalue().encode('utf-8')
-    bucket.put_object(Key=backup_path, Body=payload)
+    path = 'csv_backups/{}'.format(dir)
+    bucket.put_object(Key=path, Body=string.encode('utf-8'))
 
 
 def full_csv(items):
-    file_name = os.path.join(OUTPUT_DIRECTORY, 'full_scrape.csv')
+    file_like = io.StringIO()
+    csv_writer = csv.DictWriter(file_like, fieldnames=FIELD_NAMES)
 
-    with open(file_name, 'w') as f:
-        csv_writer = csv.DictWriter(f, fieldnames=FIELD_NAMES)
+    csv_writer.writeheader()
+    for item in items:
+        csv_writer.writerow(item)
 
-        csv_writer.writeheader()
-        for item in items:
-            csv_writer.writerow(item)
+    return file_like.getvalue()
 
 
 def trimmed_json(items):
@@ -76,14 +84,7 @@ def trimmed_json(items):
     for item in items_to_save:
         trimmed_items.append({key: item[key] for key in RETAINED_KEYS})
 
-    file_name = os.path.join(OUTPUT_DIRECTORY, 'trimmed_values.json')
-    with open(file_name, 'w') as f:
-        f.write(json.dumps(trimmed_items, default=_json_serial))
-
-
-def _makes_the_cut(item):
-    return item['address_confidence'] >= 9 \
-        and item['address_accuracy'] == 'ROOFTOP'
+    return json.dumps(trimmed_items, default=_json_serial)
 
 
 def _json_serial(obj):
