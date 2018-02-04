@@ -7,6 +7,7 @@ import os
 import boto3
 
 from scraper.items import Apartment
+from .makes_the_cut import makes_the_cut, RETAINED_KEYS
 
 
 FIELD_NAMES = list(Apartment.fields.keys())
@@ -49,7 +50,7 @@ def s3_upload(items):
     #
     # os.environ['AWS_ACCESS_KEY_ID']
     # os.environ['AWS_SECRET_ACCESS_KEY']
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-2')
     bucket = s3.Bucket('kijiji-apartments')
 
     backup_path = 'csv_backups/{}'.format(file_name)
@@ -69,36 +70,11 @@ def full_csv(items):
 
 
 def trimmed_json(items):
-    retained_keys = [
-        'address',
-        'url',
-        'headline',
-        'description',
-        'id',
-        'date',
-        'price',
-        'is_furnished',
-        'allows_animals',
-        'latitude',
-        'longitude',
-        'num_rooms',
-    ]
-
-    can_be_none = ['is_furnished', 'allows_animals']
+    items_to_save = filter(makes_the_cut, items)
 
     trimmed_items = []
-    for item in filter(_makes_the_cut, items):
-        assert [field in item for field in retained_keys]
-
-        skip = False
-        for field in retained_keys:
-            if item[field] is None and not field in can_be_none:
-                skip = True
-        
-        if skip:
-            continue
-
-        trimmed_items.append({key: item[key] for key in retained_keys})
+    for item in items_to_save:
+        trimmed_items.append({key: item[key] for key in RETAINED_KEYS})
 
     file_name = os.path.join(OUTPUT_DIRECTORY, 'trimmed_values.json')
     with open(file_name, 'w') as f:
