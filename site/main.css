@@ -21,6 +21,10 @@ html, body, #root, #mapContainer {
     width: 4em;
 }
 
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 #hamburger-input, .toggle {
     display: none;
 }
