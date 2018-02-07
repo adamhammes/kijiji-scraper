@@ -2,8 +2,10 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./main.css";
 
-import * as L from "leaflet";
+import "leaflet";
 import "leaflet.markercluster";
+
+declare const L: any;
 
 import apartments from "./apartment";
 import { MarkerManager } from "./markers/marker_manager";
@@ -14,6 +16,7 @@ const quebecLocation = {
   lat: 46.82,
   lng: -71.3
 };
+
 
 const minZoom = 9;
 const defaultZoom = minZoom + 2;
