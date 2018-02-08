@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = env => {
   process.env.values_path = env ? env.values_path : "";
@@ -36,7 +37,7 @@ module.exports = env => {
         },
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"]
+          use: ExtractTextPlugin.extract("css-loader")
         },
         {
           test: /\.(gif|png|jpe?g|svg)$/,
@@ -48,7 +49,8 @@ module.exports = env => {
       new HtmlWebPackPlugin({
         template: "./site/index.html",
         filename: "./index.html"
-      })
+      }),
+      new ExtractTextPlugin("main.css")
     ]
   };
 };

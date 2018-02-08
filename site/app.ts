@@ -1,5 +1,3 @@
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./main.css";
 
 import "leaflet";
