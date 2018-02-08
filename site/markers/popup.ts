@@ -33,7 +33,33 @@ const byline: ElementMaker = ap => {
   const p = document.createElement("p");
   p.appendChild(bold);
 
+  if (typeof ap.is_furnished !== 'undefined') {
+    const title = ap.is_furnished ? 'Meublé': 'Non-meublé';
+    const elem = _makeIcon('home', title, !ap.is_furnished);
+
+    p.insertAdjacentHTML('beforeend', ' | ' + elem);
+  }
+
+  if (typeof ap.allows_animals !== 'undefined') {
+    const title = ap.allows_animals ? 'Animaux acceptés': 'Animaux non-acceptés';
+    const elem = _makeIcon('paw', title, !ap.allows_animals);
+
+    p.insertAdjacentHTML('beforeend', ' | ' + elem);
+  }
+
   return p;
+};
+
+const _makeIcon = (icon, title, xout) => {
+  const iconSize = xout ? ' fa-stack-1x' : ''; 
+  const iconHTML = `<i title="${title}" class="fas fa-${icon}${iconSize}"/>`;
+  const banHTML = '<i class="fa fa-ban fa-stack-2x"/>';
+
+  if (xout) {
+    return `<span class="fa-stack">${iconHTML}${banHTML}</span>`;
+  } else {
+    return iconHTML;
+  }
 };
 
 const title: ElementMaker = ap => {
