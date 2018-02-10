@@ -25,6 +25,9 @@ export class Filter {
 
     this.form = document.querySelector("#settings");
 
+    const inputs: NodeListOf<HTMLElement> = document.querySelectorAll('#settings input');
+
+    inputs.forEach(input => input.addEventListener('input', this.onFormChange.bind(this)));
     this.form.onchange = this.onFormChange.bind(this);
     this.form.onsubmit = e => e.preventDefault();
   }
