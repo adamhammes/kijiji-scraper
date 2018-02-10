@@ -1,5 +1,5 @@
-import { Apartment } from "./apartment";
-import { MarkerStatus } from "./markers/marker_manager";
+import { Apartment } from './apartment';
+import { MarkerStatus } from './markers/marker_manager';
 
 export class Persister {
   private markerStatuses: Map<number, MarkerStatus>;
@@ -8,7 +8,7 @@ export class Persister {
     let persisted: Map<number, MarkerStatus>;
     try {
       persisted = new Map(
-        JSON.parse(localStorage.getItem("favoritedApartments"))
+        JSON.parse(localStorage.getItem('favoritedApartments'))
       );
     } catch {
       persisted = new Map();
@@ -35,7 +35,7 @@ export class Persister {
       apArray.push(entry);
     }
 
-    localStorage.setItem("favoritedApartments", JSON.stringify(apArray));
+    localStorage.setItem('favoritedApartments', JSON.stringify(apArray));
   }
 
   setStatus(ap: Apartment, status: MarkerStatus): void {

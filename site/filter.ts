@@ -1,5 +1,5 @@
-import { MarkerManager, MarkerStatus } from "./markers/marker_manager";
-import { Apartment } from "./apartment";
+import { MarkerManager, MarkerStatus } from './markers/marker_manager';
+import { Apartment } from './apartment';
 
 interface Filterable {
   (manager: MarkerManager, apartment: Apartment, formData: FormData): boolean;
@@ -23,11 +23,15 @@ export class Filter {
     this.marker_manager = marker_manager;
     this.all_apartments = apartments;
 
-    this.form = document.querySelector("#settings");
+    this.form = document.querySelector('#settings');
 
-    const inputs: NodeListOf<HTMLElement> = document.querySelectorAll('#settings input');
+    const inputs: NodeListOf<HTMLElement> = document.querySelectorAll(
+      '#settings input'
+    );
 
-    inputs.forEach(input => input.addEventListener('input', this.onFormChange.bind(this)));
+    inputs.forEach(input =>
+      input.addEventListener('input', this.onFormChange.bind(this))
+    );
     this.form.onchange = this.onFormChange.bind(this);
     this.form.onsubmit = e => e.preventDefault();
   }
@@ -41,19 +45,21 @@ export class Filter {
     const formData = new FormData(this.form);
 
     const apartment_array = [...this.all_apartments];
-    const matching_apartments = new Set(apartment_array.filter(ap =>
-      this.filters.every(filter => filter(this.marker_manager, ap, formData))
-    ));
+    const matching_apartments = new Set(
+      apartment_array.filter(ap =>
+        this.filters.every(filter => filter(this.marker_manager, ap, formData))
+      )
+    );
 
     this.marker_manager.displayApartments(matching_apartments);
   }
 }
 
 const priceFilter: Filterable = (_, apartment, formData) => {
-  const max_input_value = formData.get("maxPrice").toString();
+  const max_input_value = formData.get('maxPrice').toString();
   const max_price = Number.parseFloat(max_input_value) || Number.MAX_VALUE;
 
-  const min_input_value = formData.get("minPrice").toString();
+  const min_input_value = formData.get('minPrice').toString();
   const min_price = Number.parseFloat(min_input_value) || Number.MIN_VALUE;
 
   const realPrice = apartment.price / 100;
@@ -61,33 +67,33 @@ const priceFilter: Filterable = (_, apartment, formData) => {
 };
 
 const furnishedFilter: Filterable = (_, apartment, formData) => {
-  const name = formData.get("meuble").toString();
+  const name = formData.get('meuble').toString();
 
   switch (name) {
-    case "peuimporte":
+    case 'peuimporte':
       return true;
-    case "oui":
+    case 'oui':
       return apartment.is_furnished === true;
-    case "non":
+    case 'non':
       return apartment.is_furnished === false;
     default:
-      alert("problem in furnishedFilter");
+      alert('problem in furnishedFilter');
       return false;
   }
 };
 
 const animalFilter: Filterable = (_, apartment, formData) => {
-  const name = formData.get("animaux").toString();
+  const name = formData.get('animaux').toString();
 
   switch (name) {
-    case "peuimporte":
+    case 'peuimporte':
       return true;
-    case "oui":
+    case 'oui':
       return apartment.allows_animals === true;
-    case "non":
+    case 'non':
       return apartment.allows_animals === false;
     default:
-      alert("problem in animalFilter");
+      alert('problem in animalFilter');
       return false;
   }
 };
@@ -97,7 +103,7 @@ const sizeFilter: Filterable = (_, apartment, formData) => {
 
   for (let size of sizes) {
     const as_string = size.toString();
-    const size_is_on = formData.get(as_string) === "on";
+    const size_is_on = formData.get(as_string) === 'on';
 
     if (size_is_on && apartment.num_rooms == size) {
       return true;
@@ -112,7 +118,7 @@ const sizeFilter: Filterable = (_, apartment, formData) => {
 };
 
 const favoritedFilter: Filterable = (manager, apartment, formData) => {
-  const filterByFavorites = formData.get("onlyFavorites") === "on";
+  const filterByFavorites = formData.get('onlyFavorites') === 'on';
 
   return (
     !filterByFavorites ||
@@ -121,7 +127,7 @@ const favoritedFilter: Filterable = (manager, apartment, formData) => {
 };
 
 const hideSeenFilter: Filterable = (manager, apartment, formData) => {
-  const hideSeen = formData.get("hideSeen") === "on";
+  const hideSeen = formData.get('hideSeen') === 'on';
 
   return !hideSeen || manager.getStatus(apartment) !== MarkerStatus.Seen;
 };

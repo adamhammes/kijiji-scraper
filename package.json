@@ -7,7 +7,8 @@
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0",
     "build": "webpack -p",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "prettier": "prettier --single-quote --write \"site/**/*.ts\" webpack.config.js"
   },
   "dependencies": {
     "@types/leaflet": "^1.2.5",
