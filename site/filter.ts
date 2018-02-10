@@ -40,17 +40,10 @@ export class Filter {
   filter() {
     const formData = new FormData(this.form);
 
-    const matching_apartments = new Set();
-    for (let apartment of this.all_apartments) {
-      let pass = true;
-      for (let filter of this.filters) {
-        pass = pass && filter(this.marker_manager, apartment, formData);
-      }
-
-      if (pass) {
-        matching_apartments.add(apartment);
-      }
-    }
+    const apartment_array = [...this.all_apartments];
+    const matching_apartments = new Set(apartment_array.filter(ap =>
+      this.filters.every(filter => filter(this.marker_manager, ap, formData))
+    ));
 
     this.marker_manager.displayApartments(matching_apartments);
   }
