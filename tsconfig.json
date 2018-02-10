@@ -8,6 +8,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "strictPropertyInitialization": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "alwaysStrict": true
   }
 }
