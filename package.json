@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "@types/leaflet": "^1.2.5",

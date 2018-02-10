@@ -6,7 +6,7 @@ interface Filterable {
 }
 
 export class Filter {
-  private filters: [Filterable] = [
+  private filters: Filterable[] = [
     priceFilter,
     sizeFilter,
     furnishedFilter,
@@ -79,6 +79,7 @@ const furnishedFilter: Filterable = (_, apartment, formData) => {
       return apartment.is_furnished === false;
     default:
       alert("problem in furnishedFilter");
+      return false;
   }
 };
 
@@ -94,6 +95,7 @@ const animalFilter: Filterable = (_, apartment, formData) => {
       return apartment.allows_animals === false;
     default:
       alert("problem in animalFilter");
+      return false;
   }
 };
 

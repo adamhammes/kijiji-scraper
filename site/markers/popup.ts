@@ -6,7 +6,7 @@ interface ElementMaker {
 }
 
 export const genPopupContent = (manager: MarkerManager, ap: Apartment) => {
-  const parts: [ElementMaker] = [title, status, byline, description];
+  const parts: ElementMaker[] = [title, status, byline, description];
 
   const container = document.createElement("div");
 
@@ -50,7 +50,7 @@ const byline: ElementMaker = ap => {
   return p;
 };
 
-const _makeIcon = (icon, title, xout) => {
+const _makeIcon = (icon: string, title: string, xout: boolean) => {
   const iconSize = xout ? ' fa-stack-1x' : ''; 
   const iconHTML = `<i title="${title}" class="fas fa-${icon}${iconSize}"/>`;
   const banHTML = '<i class="fa fa-ban fa-stack-2x"/>';

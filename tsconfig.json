@@ -2,6 +2,12 @@
   "compilerOptions": {
     "target": "es2017",
     "allowJs": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true
   }
 }
