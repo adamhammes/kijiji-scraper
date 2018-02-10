@@ -1,4 +1,4 @@
-[kijiji-scraper](https://kijijimap.hammes.io)
+[kijiji-scraper](http://kijijimap.hammes.io/)
 -------------
 
 `kijiji-scraper` is a tool I used to search for apartments while moving to Quebec.
