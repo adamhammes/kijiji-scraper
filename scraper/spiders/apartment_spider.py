@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import scrapy
 from scraper.items import Apartment
@@ -7,7 +8,23 @@ from scrapy.loader import ItemLoader
 
 class ApartmentSpider(scrapy.Spider):
     base_url = 'https://www.kijiji.ca'
-    name = "apartments"
+    name = 'apartments'
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        try:
+            if self.full_scrape:
+                logging.debug('Running full scrape')
+            else:
+                logging.debug('Only scraping first page of results')
+        except AttributeError:
+            logging.debug(
+                'Command-line arg "full_scrape" not found\n'
+                'defaulting to only using first page of results'
+            )
+            self.full_scrape = False
+
 
     def start_requests(self):
         urls = [
@@ -27,7 +44,7 @@ class ApartmentSpider(scrapy.Spider):
         next_path = response.css(
             'a[title~="Suivante"]::attr(href)').extract_first()
 
-        if next_path:
+        if next_path and self.full_scrape:
             next_url = ApartmentSpider.base_url + next_path
             yield scrapy.Request(url=next_url, callback=self.results_page)
 
