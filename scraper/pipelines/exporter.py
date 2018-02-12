@@ -16,7 +16,8 @@ LATEST_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, 'latest')
 
 
 class ItemCollector:
-    def open_spider(self, _):
+    def open_spider(self, spider):
+        self.full_scrape = spider.full_scrape
         self.items = []
 
         self.exporters = [
@@ -40,7 +41,9 @@ class ItemCollector:
                 f.write(value)
 
             time_path = os.path.join(date_string, name)
-            upload_to_s3(time_path, value)
+
+            if self.full_scrape:
+                upload_to_s3(time_path, value)
 
             file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
             os.makedirs(os.path.dirname(file_time_path), exist_ok=True)
