@@ -4,7 +4,17 @@
 `kijiji-scraper` is a tool I used to search for apartments while moving to Quebec.
 The program scrapes Kijiji (the local Craigslist equivalent) for apartments on sale and plots them on a map with several options for filtering/favoriting.
 
-![Site screenshot](/ReadmeScreenshot.png)
+User attestations:
+
+> Cet outil est incroyablement utile !! Je partage !
+>
+> waouh c'est vraiment génial !!
+>
+> Wow c'est malade!
+
+Screenshot:
+
+![Site in action](/ReadmeScreenshot.png)
 
 The code is split into two parts:
 
