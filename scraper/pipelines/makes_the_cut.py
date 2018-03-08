@@ -52,12 +52,12 @@ def sufficient_accuracy(item):
 
 
 MAX_DISTANCE_KM = 60
-QC_COORDS = (46.83, -71.25)
 
 
 def within_distance(item):
+    origin_coords = item['origin'].coords
     latlon = item['latitude'], item['longitude']
-    return distance_between_km(latlon, QC_COORDS) <= MAX_DISTANCE_KM
+    return distance_between_km(latlon, origin_coords) <= MAX_DISTANCE_KM
 
 
 RADIUS_OF_EARTH_KM = 6371
@@ -77,9 +77,10 @@ def distance_between_km(p1, p2):
 
 
 if __name__ == '__main__':
+    qc_coords = (46.83, -71.25)
     print('Should be zero:')
-    print(distance_between_km(QC_COORDS, QC_COORDS))
+    print(distance_between_km(qc_coords, qc_coords))
     montreal = (45.51, -73.59)
 
     print('Should be 232.39 ish:')
-    print(distance_between_km(QC_COORDS, montreal))
+    print(distance_between_km(qc_coords, montreal))

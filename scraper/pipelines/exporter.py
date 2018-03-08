@@ -85,7 +85,15 @@ def trimmed_json(items):
 
     trimmed_items = []
     for item in items_to_save:
-        trimmed_items.append({key: item[key] for key in RETAINED_KEYS})
+        origin = item['origin']
+        city = origin['city']
+        lodging_type = origin['lodging_type']
+
+        new_item = {key: item[key] for key in RETAINED_KEYS}
+        new_item['city'] = city
+        new_item['lodging_type'] = lodging_type
+
+        trimmed_items.append(new_item)
 
     return json.dumps(trimmed_items, default=_json_serial)
 

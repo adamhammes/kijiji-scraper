@@ -9,7 +9,7 @@ html, body, #root, #mapContainer {
 }
 
 #sidebar {
-    position: relative;
+    position: fixed;
     padding: 0 1em;
 }
 
