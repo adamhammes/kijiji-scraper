@@ -14,9 +14,6 @@ FIELD_NAMES = list(Apartment.fields.keys())
 OUTPUT_DIRECTORY = os.environ['KIJIJI_OUTPUT_DIRECTORY']
 LATEST_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, 'latest')
 
-BUCKET_NAME = 'kijiji-apartments'
-S3_BACKUP_PATH = 'csv-backups'
-
 
 class ItemCollector:
     def open_spider(self, spider):
@@ -33,9 +30,6 @@ class ItemCollector:
         return item
 
     def close_spider(self, _):
-        if self.full_scrape:
-            s3_init()
-
         date_string = datetime_slug()
 
         for exporter, name in self.exporters:
@@ -49,8 +43,6 @@ class ItemCollector:
             time_path = os.path.join(date_string, name)
 
             if self.full_scrape:
-                latest_path = os.path.join('latest', name)
-                upload_to_s3(latest_path, value)
                 upload_to_s3(time_path, value)
 
             file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
@@ -64,26 +56,17 @@ def datetime_slug():
     return now.strftime('%Y%m%dT%H%M%SZ')
 
 
-def s3_init():
-    s3 = boto3.resource('s3', region_name='us-east-2')
-    bucket = s3.Bucket(BUCKET_NAME)
-
-    latest_path = os.path.join(S3_BACKUP_PATH, 'latest/')
-    for key in bucket.objects.filter(Prefix=latest_path):
-        key.delete()
-
-
-def upload_to_s3(file_path, string):
+def upload_to_s3(dir, string):
     # For the following line of code to work, the following environment
     # variables need to be set:
     #
     # os.environ['AWS_ACCESS_KEY_ID']
     # os.environ['AWS_SECRET_ACCESS_KEY']
     s3 = boto3.resource('s3', region_name='us-east-2')
-    bucket = s3.Bucket(BUCKET_NAME)
+    bucket = s3.Bucket('kijiji-apartments')
 
-    full_path = os.path.join(S3_BACKUP_PATH, file_path)
-    bucket.put_object(Key=full_path, Body=string.encode('utf-8'))
+    path = 'csv_backups/{}'.format(dir)
+    bucket.put_object(Key=path, Body=string.encode('utf-8'))
 
 
 def full_csv(items):
