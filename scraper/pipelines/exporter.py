@@ -69,7 +69,7 @@ def s3_init():
     bucket = s3.Bucket(BUCKET_NAME)
 
     latest_path = os.path.join(S3_BACKUP_PATH, 'latest/')
-    for key in bucket.list(latest_path):
+    for key in bucket.objects.filter(latest_path):
         key.delete()
 
 

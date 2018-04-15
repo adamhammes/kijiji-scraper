@@ -39,7 +39,8 @@ class ApartmentSpider(scrapy.Spider):
 
         for path in apartment_paths:
             full_url = ApartmentSpider.base_url + path
-            yield scrapy.Request(url=full_url, callback=self.apartment_page)
+            meta = { 'dont_cache': True }
+            yield scrapy.Request(url=full_url, callback=self.apartment_page, meta=meta)
 
         next_path = response.css(
             'a[title~="Suivante"]::attr(href)').extract_first()
