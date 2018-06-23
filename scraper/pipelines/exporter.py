@@ -11,8 +11,8 @@ from .makes_the_cut import makes_the_cut, RETAINED_KEYS
 
 
 FIELD_NAMES = list(Apartment.fields.keys())
-OUTPUT_DIRECTORY = os.environ['KIJIJI_OUTPUT_DIRECTORY']
-LATEST_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, 'latest')
+OUTPUT_DIRECTORY = os.environ["KIJIJI_OUTPUT_DIRECTORY"]
+LATEST_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, "latest")
 
 
 class ItemCollector:
@@ -21,8 +21,8 @@ class ItemCollector:
         self.items = []
 
         self.exporters = [
-            (full_csv, 'all_items.csv'),
-            (trimmed_json, 'trimmed_values.json')
+            (full_csv, "all_items.csv"),
+            (trimmed_json, "trimmed_values.json"),
         ]
 
     def process_item(self, item, _):
@@ -37,7 +37,7 @@ class ItemCollector:
 
             latest_path = os.path.join(LATEST_DIRECTORY, name)
             os.makedirs(os.path.dirname(latest_path), exist_ok=True)
-            with io.open(latest_path, 'w', encoding='utf-8') as f:
+            with io.open(latest_path, "w", encoding="utf-8") as f:
                 f.write(value)
 
             time_path = os.path.join(date_string, name)
@@ -47,13 +47,13 @@ class ItemCollector:
 
             file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
             os.makedirs(os.path.dirname(file_time_path), exist_ok=True)
-            with io.open(file_time_path, 'w', encoding='utf-8') as f:
+            with io.open(file_time_path, "w", encoding="utf-8") as f:
                 f.write(value)
 
 
 def datetime_slug():
     now = datetime.now(timezone.utc)
-    return now.strftime('%Y%m%dT%H%M%SZ')
+    return now.strftime("%Y%m%dT%H%M%SZ")
 
 
 def upload_to_s3(dir, string):
@@ -62,11 +62,11 @@ def upload_to_s3(dir, string):
     #
     # os.environ['AWS_ACCESS_KEY_ID']
     # os.environ['AWS_SECRET_ACCESS_KEY']
-    s3 = boto3.resource('s3', region_name='us-east-2')
-    bucket = s3.Bucket('kijiji-apartments')
+    s3 = boto3.resource("s3", region_name="us-east-2")
+    bucket = s3.Bucket("kijiji-apartments")
 
-    path = 'csv_backups/{}'.format(dir)
-    bucket.put_object(Key=path, Body=string.encode('utf-8'))
+    path = "csv_backups/{}".format(dir)
+    bucket.put_object(Key=path, Body=string.encode("utf-8"))
 
 
 def full_csv(items):
