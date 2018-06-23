@@ -1,16 +1,12 @@
 [[source]]
-
 name = "pypi"
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
-
 [packages]
-
 scrapy = "==1.5.0"
 geocoder = "==1.35.0"
 boto3 = "==1.5.21"
 
-
 [dev-packages]
-
+pylint = "*"
