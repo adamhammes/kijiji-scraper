@@ -17,6 +17,7 @@ def makes_the_cut(item):
 
 
 RETAINED_KEYS = {
+    "city_slug",
     "address",
     "url",
     "headline",
@@ -51,13 +52,13 @@ def sufficient_accuracy(item):
     return confidence >= 9 and accuracy == "ROOFTOP"
 
 
-MAX_DISTANCE_KM = 60
-QC_COORDS = (46.83, -71.25)
+MAX_DISTANCE_KM = 50
 
 
 def within_distance(item):
-    latlon = item["latitude"], item["longitude"]
-    return distance_between_km(latlon, QC_COORDS) <= MAX_DISTANCE_KM
+    apartment_latlon = item["latitude"], item["longitude"]
+    city_latlon = item["starting_city"].latitude, item["starting_city"].longitude
+    return distance_between_km(apartment_latlon, city_latlon) <= MAX_DISTANCE_KM
 
 
 RADIUS_OF_EARTH_KM = 6371
@@ -74,12 +75,3 @@ def distance_between_km(p1, p2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
     return c * RADIUS_OF_EARTH_KM
-
-
-if __name__ == "__main__":
-    print("Should be zero:")
-    print(distance_between_km(QC_COORDS, QC_COORDS))
-    montreal = (45.51, -73.59)
-
-    print("Should be 232.39 ish:")
-    print(distance_between_km(QC_COORDS, montreal))

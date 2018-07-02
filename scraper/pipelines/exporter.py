@@ -2,12 +2,14 @@ import csv
 from datetime import date, datetime, timezone
 import io
 import json
+import logging
 import os
 
 import boto3
 
 from scraper.items import Apartment
 from .makes_the_cut import makes_the_cut, RETAINED_KEYS
+from ..cities import starting_cities
 
 
 FIELD_NAMES = list(Apartment.fields.keys())
@@ -18,7 +20,8 @@ LATEST_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, "latest")
 class ItemCollector:
     def open_spider(self, spider):
         self.full_scrape = spider.full_scrape
-        self.items = []
+        self.cities = {city.slug: [] for city in starting_cities}
+        logging.debug(self.cities)
 
         self.exporters = [
             (full_csv, "all_items.csv"),
@@ -26,29 +29,31 @@ class ItemCollector:
         ]
 
     def process_item(self, item, _):
-        self.items.append(item)
+        logging.debug("process city " + str(item["starting_city"]))
+        self.cities[item["starting_city"].slug].append(item)
         return item
 
     def close_spider(self, _):
         date_string = datetime_slug()
 
-        for exporter, name in self.exporters:
-            value = exporter(self.items)
+        for slug, items in self.cities.items():
+            for exporter, exporter_name in self.exporters:
+                value = exporter(items)
 
-            latest_path = os.path.join(LATEST_DIRECTORY, name)
-            os.makedirs(os.path.dirname(latest_path), exist_ok=True)
-            with io.open(latest_path, "w", encoding="utf-8") as f:
-                f.write(value)
+                latest_path = os.path.join(LATEST_DIRECTORY, slug, exporter_name)
+                os.makedirs(os.path.dirname(latest_path), exist_ok=True)
+                with io.open(latest_path, "w", encoding="utf-8") as f:
+                    f.write(value)
 
-            time_path = os.path.join(date_string, name)
+                time_path = os.path.join(date_string, slug, exporter_name)
 
-            if self.full_scrape:
-                upload_to_s3(time_path, value)
+                if self.full_scrape:
+                    upload_to_s3(time_path, value)
 
-            file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
-            os.makedirs(os.path.dirname(file_time_path), exist_ok=True)
-            with io.open(file_time_path, "w", encoding="utf-8") as f:
-                f.write(value)
+                file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
+                os.makedirs(os.path.dirname(file_time_path), exist_ok=True)
+                with io.open(file_time_path, "w", encoding="utf-8") as f:
+                    f.write(value)
 
 
 def datetime_slug():

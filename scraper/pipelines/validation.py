@@ -1,5 +1,6 @@
 from datetime import datetime
 import fractions
+import logging
 import re
 
 from scrapy.exceptions import DropItem
