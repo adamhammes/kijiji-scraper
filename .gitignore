@@ -2,6 +2,10 @@
 *.py[cod]
 __pycache__/
 
+# Env variables
+secrets.sh
+output/
+
 # Scrapy stuff
 .scrapy/
 

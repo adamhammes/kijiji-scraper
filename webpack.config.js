@@ -36,8 +36,15 @@ module.exports = env => {
           ]
         },
         {
-          test: /\.css$/,
-          use: ExtractTextPlugin.extract('css-loader')
+          test: /\.scss$/,
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: [
+              'css-loader',
+              'postcss-loader',
+              'sass-loader'
+            ],
+          })
         },
         {
           test: /\.(gif|png|jpe?g|svg)$/,
@@ -50,7 +57,7 @@ module.exports = env => {
         template: './site/index.html',
         filename: './index.html'
       }),
-      new ExtractTextPlugin('main.css')
+      new ExtractTextPlugin('[name]-[hash].css')
     ]
   };
 };
