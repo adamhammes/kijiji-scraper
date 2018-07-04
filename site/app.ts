@@ -1,4 +1,4 @@
-import './main.scss';
+import './css/main.scss';
 
 import 'leaflet';
 import 'leaflet.markercluster';
@@ -18,16 +18,22 @@ const quebecLocation = {
 const minZoom = 9;
 const defaultZoom = minZoom + 2;
 
-const map = L.map('mapContainer').setView(quebecLocation, defaultZoom);
+const map = L.map('mapContainer', {
+  attributionControl: false,
+  zoomControl: false,
+}).setView(quebecLocation, defaultZoom);
+
+// L.control.zoom({
+//   position: 'bottomright'
+// }).addTo(map);
 
 const accessToken =
   'pk.eyJ1IjoiYWRhbWhhbW1lcyIsImEiOiJjamQxczNrajQyd25kMndvNWR6cGdqYWl2In0.30k-mIhdJr0otiiSv8mQ-w';
-const attribution =
-  'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://createivecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery @ <a href="http://mapbox.com">Mapbox</a>';
+// const attribution =
+//   'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://createivecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery @ <a href="http://mapbox.com">Mapbox</a>';
 L.tileLayer(
   'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
   {
-    attribution,
     minZoom,
     id: 'mapbox.streets',
     accessToken

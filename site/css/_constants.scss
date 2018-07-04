@@ -1,0 +1,35 @@
+$break-medium-size: 480px;
+$break-large-size: 768px;
+$break-xlarge-size: 1200px;
+
+@mixin break-medium {
+    @media screen and (min-width: 480px) {
+        @content;
+    }
+}
+
+@mixin break-large {
+    @media screen and (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin break-xlarge {
+    @media screen and (min-width: 1200px) {
+        @content;
+    }
+}
+
+.hide-big {
+    @include break-medium {
+        display: none;
+    }
+}
+
+.hide-small {
+    display: none;
+
+    @include break-medium {
+        display: unset;
+    }
+}

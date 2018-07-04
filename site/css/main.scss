@@ -1,0 +1,124 @@
+@import "constants";    
+
+html, body, .root {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.root {
+    position: relative;
+}
+
+#mapContainer {
+    height: 100%;
+    width: 100%;
+}
+
+.sidebar {
+    position: absolute;
+    z-index: 500;
+    background-color: white;
+    bottom: 0;
+    width: 100%;
+
+    @include break-medium {
+        bottom: unset;
+        width: unset;
+        height: 100%;
+    }
+}
+
+.filters-form {
+    display: none;
+    padding: 0 1em 1em 1em;
+    max-height: 18em;
+    overflow-y: scroll;
+
+    @include break-medium {
+        left: 2em;
+        top: 2em;
+        padding: 0 2em;
+        border-radius: .5em;
+        max-height: unset;
+    }
+
+    input[type=number] {
+        width: 4em;
+    }
+}
+
+.showhide {
+    cursor: pointer;
+    position: absolute;
+    right: 1em;
+    bottom: 100%;
+
+    z-index: 500;
+    background-color:white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5em;
+    height: 1.5em;
+
+    @include break-medium {
+        left: 100%;
+        top: 1em;
+
+        height: 2.5em;
+        width: 1.5em;
+    }
+}
+
+.showhide-collapsed {
+    display: none;
+}
+
+#showhide-input {
+    position: absolute;
+    visibility: hidden;
+
+    &:checked + label .showhide-expanded {
+        display: none;
+    }
+
+    &:checked + label .showhide-collapsed {
+        display: unset;
+    }
+
+    &:checked + label + .filters-form {
+        display: block;
+    }
+}
+
+.checkbox-set {
+    display: flex;
+    flex-flow: row wrap;
+
+    > label {
+        display: flex;
+        align-items: center;
+        width: 33.33%;
+    }
+}
+
+.radiobutton-set {
+    display: flex;
+    justify-content: space-between;
+
+    > label {
+        display: flex;
+        width: 33%;
+    }
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.fa-stack .fa-ban {
+    color: rgb(217, 83, 79);
+}
