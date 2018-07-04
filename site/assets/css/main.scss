@@ -32,7 +32,7 @@ html, body, .root {
 
 .filters-form {
     display: none;
-    padding: 0 1em 1em 1em;
+    padding: 0 .5em 1em;
     max-height: 18em;
     overflow-y: scroll;
 
@@ -70,6 +70,14 @@ html, body, .root {
 
         height: 2.5em;
         width: 1.5em;
+    }
+
+    .svg-icon {
+        height: 2em;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
     }
 }
 

@@ -1,4 +1,4 @@
-import './css/main.scss';
+import './assets/css/main.scss';
 
 import 'leaflet';
 import 'leaflet.markercluster';

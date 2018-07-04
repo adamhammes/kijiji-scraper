@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInlineSVGPlugin = require('webpack-html-plugin-svg-inline');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = env => {
@@ -57,6 +58,7 @@ module.exports = env => {
         template: './site/index.html',
         filename: './index.html'
       }),
+      new HtmlWebpackInlineSVGPlugin(),
       new ExtractTextPlugin('[name]-[hash].css')
     ]
   };

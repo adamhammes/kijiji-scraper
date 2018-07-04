@@ -34,6 +34,7 @@
     "ts-loader": "^3.4.0",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.1"
+    "webpack-dev-server": "^2.11.1",
+    "webpack-html-plugin-svg-inline": "^2.0.0"
   }
 }
