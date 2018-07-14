@@ -80,6 +80,10 @@ body,
     transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
+
+    @include break-large {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
   }
 }
 
