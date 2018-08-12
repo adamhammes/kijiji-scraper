@@ -1,63 +1,35 @@
-const path = require('path');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require("path");
 
-module.exports = env => {
-  process.env.values_path = env ? env.values_path : '';
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const WriteFilePlugin = require("write-file-webpack-plugin");
 
-  return {
-    entry: './site/app.ts',
-    resolve: {
-      extensions: ['.tsx', '.ts', '.js']
-    },
-    resolveLoader: {
-      modules: ['node_modules', path.resolve(__dirname, 'site/loaders')]
-    },
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: 'bundle.js'
-    },
-    devServer: {
-      contentBase: './dist'
-    },
-    module: {
-      rules: [
-        {
-          test: /\.ts$/,
-          exclude: /node_modules/,
-          use: ['babel-loader', 'ts-loader']
-        },
-        {
-          test: /\.html$/,
-          use: [
-            {
-              loader: 'html-loader'
-            }
-          ]
-        },
-        {
-          test: /\.scss$/,
-          use: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: [
-              'css-loader',
-              'postcss-loader',
-              'sass-loader'
-            ],
-          })
-        },
-        {
-          test: /\.(gif|png|jpe?g|svg)$/,
-          use: 'file-loader'
-        }
-      ]
-    },
-    plugins: [
-      new HtmlWebPackPlugin({
-        template: './site/index.html',
-        filename: './index.html'
-      }),
-      new ExtractTextPlugin('[name]-[hash].css')
+const BUILD_DIR = path.resolve(__dirname, "build");
+
+module.exports = {
+  entry: path.resolve(__dirname, "site/app.ts"),
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"]
+  },
+  output: {
+    path: BUILD_DIR,
+    filename: "bundle.js"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: ["babel-loader", "ts-loader"]
+      },
+      {
+        test: /\.scss$/,
+        use: ["css-loader", "postcss-loader", "sass-loader"]
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/,
+        use: "file-loader"
+      }
     ]
-  };
+  },
+  plugins: [new CopyWebpackPlugin(["site/public"]), new WriteFilePlugin()]
 };

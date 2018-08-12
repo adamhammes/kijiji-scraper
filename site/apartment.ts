@@ -1,5 +1,4 @@
-declare function require(path: string): any;
-const apartment_json = require('apartment_values!');
+const apartment_json: any = {};
 
 export interface Apartment {
   id: number;

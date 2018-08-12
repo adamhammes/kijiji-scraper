@@ -8,13 +8,14 @@ output/
 
 # Scrapy stuff
 .scrapy/
-
-# Output files
 *.csv
 *.log
 *.txt
 
+# Built site
+build/
+site/public
+
 # Javascript stuff
 node_modules/
-dist/
 

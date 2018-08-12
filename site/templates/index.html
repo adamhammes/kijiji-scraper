@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113910402-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+
+            gtag('config', 'UA-113910402-1');
+        </script>
+
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        {% if page.title %}
+            <title>{{ page.title }}</title>
+        {% endif %}
+
+        {% if page.extra.javascriptHead %}
+        <script>{{ page.extra.javascriptHead | safe }}</script>
+        {% endif %}
+
+        <meta charset="utf-8">
+    </head>
+    <body>
+        {% block content %}
+            {% set cities = get_section(path="cities/_index.md") %}
+            <ul>
+            {% for city in cities.pages %}
+                <li>
+                    <a href="{{ city.path }}">{{ city.extra.cityName }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endblock content %}
+    </body>
+</html>

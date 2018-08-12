@@ -1,0 +1,107 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="root">
+    <div class="sidebar">
+        <input id="showhide-input" type="checkbox" checked="checked">
+        <label class="showhide" for="showhide-input">
+            <img class="showhide-collapsed svg-icon" inline src="assets/icons/triangle-up.svg"/>
+            <img class="showhide-expanded svg-icon" inline src="assets/icons/triangle-down.svg"/>
+        </label>
+        <form class="filters-form" id="settings">
+            <section id="prix">
+                <h4>
+                    Prix
+                </h4>
+                <input type="number" name="minPrice">
+                à
+                <input type="number" name="maxPrice">
+            </section>
+            <section>
+                <h4>
+                    Nombre de pièces
+                </h4>
+                <div class="checkbox-set">
+                    <label>
+                        <input id="chambre1.5" type="checkbox" name="1.5" checked>
+                        1 1/2
+                    </label>
+                    <label>
+                        <input id="chambre2.5" type="checkbox" name="2.5" checked>
+                        2 1/2
+                    </label>
+                    <label>
+                        <input id="chambre3.5" type="checkbox" name="3.5" checked>
+                        3 1/2
+                    </label>
+                    <label>
+                        <input id="chambre4.5" type="checkbox" name="4.5" checked>
+                        4 1/2
+                    </label>
+                    <label>
+                        <input id="chambre5.5" type="checkbox" name="5.5" checked>
+                        5 1/2
+                    </label>
+                    <label>
+                        <input id="chambre6.5" type="checkbox" name="6.5" checked>
+                        6 1/2+
+                    </label>
+                </div>
+            </section>
+            <section>
+                <h4>
+                    Meublé
+                </h4>
+                <div class="radiobutton-set">
+                    <label>
+                        <input name="meuble" id="meublepeu" type="radio" value="peuimporte" checked>
+                        Peu importe
+                    </label>
+                    <label>
+                        <input name="meuble" id="meubleoui" type="radio" value="oui">
+                        Oui
+                    </label>
+                    <label>
+                        <input name="meuble" id="meublenon" type="radio" value="non">
+                        Non
+                    </label>
+                </div>
+            </section>
+            <section>
+                <h4>
+                    Animaux acceptés
+                </h4>
+                <div class="radiobutton-set">
+                    <label>
+                        <input name="animaux" id="animauxpeu" type="radio" value="peuimporte" checked>
+                        Peu importe
+                    </label>
+                    <label>
+                        <input name="animaux" id="animauxoui" type="radio" value="oui">
+                        Oui
+                    </label>
+                    <label>
+                        <input name="animaux" id="animauxnon" type="radio" value="non">
+                        Non
+                    </label>
+                </div>
+            </section>
+            <section>
+                <h4>
+                    Vos appartements
+                </h4>
+                <label>
+                    <input id="onlyFavorites" name="onlyFavorites" type="checkbox"/>
+                    Uniquement mes favoris
+                </label>
+                <br>
+                <label>
+                    <input id="hideSeen" name="hideSeen" type="checkbox"/>
+                    Cacher vus
+                </label>
+            </section>
+        </form>
+    </div>
+    <div id="mapContainer"></div>
+</div>
+{% endblock content %}
