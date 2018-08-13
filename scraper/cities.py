@@ -19,3 +19,5 @@ quebec = City(
 )
 
 starting_cities = [montreal, quebec]
+
+slug_to_city = {city.slug: city for city in starting_cities}
