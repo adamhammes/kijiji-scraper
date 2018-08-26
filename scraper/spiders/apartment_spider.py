@@ -1,10 +1,22 @@
 import datetime
 import logging
+import sys
 
 import scrapy
 from scraper.items import Apartment
 from scrapy.loader import ItemLoader
 from ..cities import starting_cities
+from scrapy.utils.log import configure_logging
+
+configure_logging(install_root_handler=False)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(message)s",
+    handlers=[
+        logging.FileHandler("log.txt", mode="w"),
+        logging.StreamHandler(sys.stdout),
+    ],
+)
 
 
 class ApartmentSpider(scrapy.Spider):
