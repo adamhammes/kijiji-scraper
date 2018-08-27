@@ -5,8 +5,8 @@ import sys
 import scrapy
 from scraper.items import Apartment
 from scrapy.loader import ItemLoader
-from ..cities import starting_cities
 from scrapy.utils.log import configure_logging
+from ..cities import starting_cities, HousingType
 
 configure_logging(install_root_handler=False)
 logging.basicConfig(
@@ -22,6 +22,7 @@ logging.basicConfig(
 class ApartmentSpider(scrapy.Spider):
     base_url = "https://www.kijiji.ca"
     name = "apartments"
+    version = 2
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -40,10 +41,15 @@ class ApartmentSpider(scrapy.Spider):
 
     def start_requests(self):
         for city in starting_cities:
-            meta = {"city": city}
+            apartment_meta = {"city": city, "housing_type": HousingType.Apartment}
             logging.debug(city)
             yield scrapy.Request(
-                url=city.start_url, callback=self.results_page, meta=meta
+                url=city.apartment_url, callback=self.results_page, meta=apartment_meta
+            )
+
+            colocation_meta = dict(apartment_meta, housing_type=HousingType.Colocation)
+            yield scrapy.Request(
+                url=city.apartment_url, callback=self.results_page, meta=colocation_meta
             )
 
     def results_page(self, response):
@@ -70,6 +76,7 @@ class ApartmentSpider(scrapy.Spider):
         city = response.meta["city"]
         l.add_value("starting_city", [city])
         l.add_value("city_slug", city.slug)
+        l.add_value("housing_type", [response.meta["housing_type"]])
         l.add_value("url", response.url)
         l.add_css("main_image_url", 'meta[property~="og:image"]::attr(content)')
         l.add_css("headline", "h1[class^='title']::text")

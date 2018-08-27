@@ -18,6 +18,7 @@ def makes_the_cut(item):
 
 RETAINED_KEYS = {
     "city_slug",
+    "housing_type",
     "address",
     "url",
     "headline",

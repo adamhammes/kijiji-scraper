@@ -1,3 +1,4 @@
+from collections import defaultdict
 import csv
 from datetime import date, datetime, timezone
 import io
@@ -9,7 +10,7 @@ import boto3
 
 from scraper.items import Apartment
 from .makes_the_cut import makes_the_cut, RETAINED_KEYS
-from ..cities import slug_to_city, starting_cities
+from ..cities import slug_to_city, starting_cities, HousingType
 
 
 EXPORT_TIME = None
@@ -20,6 +21,8 @@ LATEST_DIRECTORY = os.path.join(OUTPUT_DIRECTORY, "latest")
 
 class ItemCollector:
     def open_spider(self, spider):
+        self.version = spider.version
+
         self.full_scrape = spider.full_scrape
         self.cities = {city.slug: [] for city in starting_cities}
         logging.debug(self.cities)
@@ -38,10 +41,12 @@ class ItemCollector:
         for slug, items in self.cities.items():
             for exporter, exporter_name in self.exporters:
                 value = exporter(slug_to_city[slug], items)
-                export(slug, value, exporter, exporter_name, self.full_scrape)
+                export(
+                    slug, value, exporter, exporter_name, self.full_scrape, self.version
+                )
 
 
-def export(city_slug, value, exporter, exporter_name, full_scrape):
+def export(city_slug, value, exporter, exporter_name, full_scrape, version):
     latest_path = os.path.join(LATEST_DIRECTORY, city_slug, exporter_name)
     os.makedirs(os.path.dirname(latest_path), exist_ok=True)
     with io.open(latest_path, "w", encoding="utf-8") as f:
@@ -50,7 +55,7 @@ def export(city_slug, value, exporter, exporter_name, full_scrape):
     time_path = os.path.join(datetime_slug(), city_slug, exporter_name)
 
     if full_scrape:
-        upload_to_s3(time_path, value)
+        upload_to_s3(time_path, value, version)
 
     file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
     os.makedirs(os.path.dirname(file_time_path), exist_ok=True)
@@ -68,16 +73,21 @@ def datetime_slug():
     return EXPORT_TIME
 
 
-def upload_to_s3(dir, string):
+def upload_to_s3(dir, string, version):
     # For the following line of code to work, the following environment
     # variables need to be set:
     #
     # os.environ['AWS_ACCESS_KEY_ID']
     # os.environ['AWS_SECRET_ACCESS_KEY']
+    if version == 2:
+        base_path = "v2"
+    else:
+        base_path = "csv_backups"
+
     s3 = boto3.resource("s3", region_name="us-east-2")
     bucket = s3.Bucket("kijiji-apartments")
 
-    path = "csv_backups/{}".format(dir)
+    path = "{}/{}".format(base_path, dir)
     bucket.put_object(Key=path, Body=string.encode("utf-8"))
 
 
@@ -95,11 +105,11 @@ def full_csv(_, items):
 def trimmed_json(city, items):
     items_to_save = filter(makes_the_cut, items)
 
-    trimmed_items = []
-    for item in items_to_save:
-        trimmed_items.append({key: item[key] for key in RETAINED_KEYS})
+    to_export = {"city": city._asdict(), "items": defaultdict(list)}
 
-    to_export = {"city": city._asdict(), "apartments": trimmed_items}
+    for item in items_to_save:
+        trimmed_item = {key: item[key] for key in RETAINED_KEYS}
+        to_export["items"][item["housing_type"].name].append(trimmed_item)
 
     return json.dumps(to_export, default=_json_serial)
 
@@ -107,4 +117,8 @@ def trimmed_json(city, items):
 def _json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
+
+    if isinstance(obj, HousingType):
+        return obj.name
+
     raise TypeError("Type {} is not serializable".format(type(obj)))
