@@ -9,4 +9,4 @@ geocoder = "==1.35.0"
 boto3 = "==1.5.21"
 
 [dev-packages]
-pylint = "*"
+pylint = "==2.1.1"
