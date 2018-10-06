@@ -3,9 +3,7 @@ import scrapy
 
 class Apartment(scrapy.Item):
     # Fields that don't need processing
-    starting_city = scrapy.Field()
-    city_slug = scrapy.Field()
-    housing_type = scrapy.Field()
+    origin = scrapy.Field()
     url = scrapy.Field()
     main_image_url = scrapy.Field()
     headline = scrapy.Field()

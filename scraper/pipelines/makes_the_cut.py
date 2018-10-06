@@ -17,7 +17,7 @@ def makes_the_cut(item):
 
 
 RETAINED_KEYS = {
-    "city_slug",
+    "origin",
     "housing_type",
     "address",
     "url",
@@ -53,13 +53,12 @@ def sufficient_accuracy(item):
     return confidence >= 9 and accuracy == "ROOFTOP"
 
 
-MAX_DISTANCE_KM = 50
-
-
 def within_distance(item):
-    apartment_latlon = item["latitude"], item["longitude"]
-    city_latlon = item["starting_city"].latitude, item["starting_city"].longitude
-    return distance_between_km(apartment_latlon, city_latlon) <= MAX_DISTANCE_KM
+    city = item["origin"].city
+    city_latlon = city.latitude, city.longitude
+
+    apartment_latlon = item["latitude"], item["latitude"]
+    return distance_between_km(apartment_latlon, city_latlon) <= city.radius
 
 
 RADIUS_OF_EARTH_KM = 6371

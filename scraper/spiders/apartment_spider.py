@@ -6,7 +6,7 @@ import scrapy
 from scraper.items import Apartment
 from scrapy.loader import ItemLoader
 from scrapy.utils.log import configure_logging
-from ..cities import starting_cities, HousingType
+from ..cities import load_start_config, generate_starting_points
 
 configure_logging(install_root_handler=False)
 logging.basicConfig(
@@ -40,20 +40,20 @@ class ApartmentSpider(scrapy.Spider):
             self.full_scrape = False
 
     def start_requests(self):
-        for city in starting_cities:
-            apartment_meta = {"city": city, "housing_type": HousingType.Apartment}
-            logging.debug(city)
+        start_config = load_start_config()
+        for starting_point in generate_starting_points(start_config):
+            logging.debug(starting_point)
             yield scrapy.Request(
-                url=city.apartment_url, callback=self.results_page, meta=apartment_meta
-            )
-
-            colocation_meta = dict(apartment_meta, housing_type=HousingType.Colocation)
-            yield scrapy.Request(
-                url=city.apartment_url, callback=self.results_page, meta=colocation_meta
+                url=starting_point.url,
+                callback=self.results_page,
+                meta={"origin": starting_point},
             )
 
     def results_page(self, response):
         apartment_paths = response.css(".info-container a.title::attr(href)").extract()
+
+        if not self.full_scrape:
+            apartment_paths = [apartment_paths[0]]
 
         for path in apartment_paths:
             full_url = ApartmentSpider.base_url + path
@@ -73,11 +73,8 @@ class ApartmentSpider(scrapy.Spider):
         l = ItemLoader(item=Apartment(), response=response)
         l.default_output_processor = scrapy.loader.processors.TakeFirst()
 
-        city = response.meta["city"]
-        l.add_value("starting_city", [city])
-        l.add_value("city_slug", city.slug)
-        l.add_value("housing_type", [response.meta["housing_type"]])
-        l.add_value("url", response.url)
+        l.add_value("origin", [response.meta["origin"]])
+        l.add_value("url", response.request.url)
         l.add_css("main_image_url", 'meta[property~="og:image"]::attr(content)')
         l.add_css("headline", "h1[class^='title']::text")
         l.add_css("description", 'div[class^="descriptionContainer"] > div')

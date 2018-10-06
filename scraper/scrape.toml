@@ -1,0 +1,40 @@
+[[cities]]
+
+name_french = "Québec"
+name_english = "Québec"
+id = "quebec"
+kijiji_id ="l1700124"
+kijiji_name ="ville-de-quebec"
+longitude = 46.834872
+latitude = -71.264868
+radius = 30
+
+[[cities]]
+
+id = "montreal"
+name_french = "Montréal"
+name_english = "Montreal"
+kijiji_id = "l80002"
+kijiji_name = "grand-montreal"
+longitude = 45.5017
+latitude = -73.5673
+radius = 30
+
+
+[[ad_types]]
+
+id = "rent"
+kijiji_id = "c37"
+kijiji_name = "b-appartement-condo"
+
+[[ad_types]]
+
+id = "buy"
+kijiji_id = "c35"
+kijiji_name = "b-maison-a-vendre"
+
+[[ad_types]]
+
+id = "colocation"
+kijiji_id = "c36"
+kijiji_name = "b-chambres-a-louer-colocataire"

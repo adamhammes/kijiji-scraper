@@ -1,34 +1,64 @@
-from enum import Enum
-from collections import namedtuple
+from typing import NamedTuple
+from types import SimpleNamespace
+
+import toml
 
 
-class HousingType(Enum):
-    Colocation = "colocation"
-    Apartment = "apartment"
+class City(NamedTuple):
+    id: str
+    name_french: str
+    name_english: str
+    kijiji_id: str
+    kijiji_name: str
+    longitude: float
+    latitude: float
+    radius: float
 
 
-City = namedtuple(
-    "City", ["name", "slug", "apartment_url", "colocation_url", "latitude", "longitude"]
-)
+class AdType(NamedTuple):
+    id: str
+    kijiji_id: str
+    kijiji_name: str
 
-montreal = City(
-    name="Montréal",
-    slug="montreal",
-    apartment_url="https://www.kijiji.ca/b-appartement-condo/grand-montreal/c37l80002?ad=offering",
-    colocation_url="https://www.kijiji.ca/b-chambres-a-louer-colocataire/grand-montreal/c36l80002?ad=offering",
-    latitude=45.508840,
-    longitude=-73.587810,
-)
 
-quebec = City(
-    name="Québec City",
-    slug="quebec",
-    apartment_url="https://www.kijiji.ca/b-appartement-condo/ville-de-quebec/c37l1700124?ad=offering",
-    colocation_url="https://www.kijiji.ca/b-chambres-a-louer-colocataire/ville-de-quebec/c36l1700124?ad=offering",
-    latitude=46.8139,
-    longitude=-71.2080,
-)
+class StartingPoint(NamedTuple):
+    url: str
+    city: City
+    ad_type: AdType
 
-starting_cities = [montreal, quebec]
+    def normalized(self):
+        return {"url": self.url, "city_id": self.city.id, "ad_type_id": self.ad_type.id}
 
-slug_to_city = {city.slug: city for city in starting_cities}
+
+def load_start_config():
+    data = toml.load("scraper/scrape.toml")
+
+    return {
+        "cities": [City(**d) for d in data["cities"]],
+        "ad_types": [AdType(**d) for d in data["ad_types"]],
+    }
+
+
+def generate_starting_points(start_config):
+    for city in start_config["cities"]:
+        for ad_type in start_config["ad_types"]:
+            url = "https://kijiji.ca"
+            url += f"/{ad_type.kijiji_name}/{city.kijiji_name}"
+            url += f"/{ad_type.kijiji_id}{city.kijiji_id}"
+            url += "?ad=offering"
+
+            yield StartingPoint(url=url, city=city, ad_type=ad_type)
+
+
+def starting_cities(start_config):
+    return start_config["citites"]
+
+
+def ad_types(start_config):
+    return start_config["ad_types"]
+
+
+if __name__ == "__main__":
+    config = load_start_config()
+    for s in generate_starting_points(config):
+        print(s.url)
