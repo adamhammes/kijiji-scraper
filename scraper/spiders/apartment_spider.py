@@ -46,7 +46,7 @@ class ApartmentSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=starting_point.url,
                 callback=self.results_page,
-                meta={"origin": starting_point},
+                meta={"origin": starting_point, "dont_cache": True},
             )
 
     def results_page(self, response):
@@ -57,8 +57,9 @@ class ApartmentSpider(scrapy.Spider):
 
         for path in apartment_paths:
             full_url = ApartmentSpider.base_url + path
+            meta_with_cache = {**response.meta, "dont_cache": False}
             yield scrapy.Request(
-                url=full_url, callback=self.apartment_page, meta=response.meta
+                url=full_url, callback=self.apartment_page, meta=meta_with_cache
             )
 
         next_path = response.css('a[title~="Suivante"]::attr(href)').extract_first()
