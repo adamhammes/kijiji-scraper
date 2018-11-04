@@ -31,5 +31,14 @@ module.exports = {
       }
     ]
   },
-  plugins: [new CopyWebpackPlugin(["site/public"]), new WriteFilePlugin()]
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: "site/public",
+        to: BUILD_DIR,
+        toType: "dir"
+      }
+    ]),
+    new WriteFilePlugin()
+  ]
 };

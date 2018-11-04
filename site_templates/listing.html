@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113910402-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-113910402-1');
+    </script>
+
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <title>Appartements Québec</title>
+    <meta charset="utf-8">
+    <script src="bundle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+        crossorigin="" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
+</head>
+
+<body>
+    <div id="root">
+        <div id="sidebar">
+            <input name="hamburger" type="checkbox" id="hamburger-input" autocomplete="off" />
+            <label for="hamburger-input" id="hamburger-label">
+                <span class="toggle">☰</span>
+            </label>
+            <form id="settings">
+                <p id="prix">
+                    Prix
+                    <br>
+                    <input type="number" name="minPrice">
+                    à
+                    <input type="number" name="maxPrice">
+                </p>
+                <p>
+                    Nombre de pièces
+                    <br>
+                    <input id="chambre1.5" type="checkbox" name="1.5" checked>
+                    <label for="chambre1.5">1 1/2</label>
+                    <br>
+                    <input id="chambre2.5" type="checkbox" name="2.5" checked>
+                    <label for="chambre2.5">2 1/2</label>
+                    <br>
+                    <input id="chambre3.5" type="checkbox" name="3.5" checked>
+                    <label for="chambre3.5">3 1/2</label>
+                    <br>
+                    <input id="chambre4.5" type="checkbox" name="4.5" checked>
+                    <label for="chambre4.5">4 1/2</label>
+                    <br>
+                    <input id="chambre5.5" type="checkbox" name="5.5" checked>
+                    <label for="chambre5.5">5 1/2</label>
+                    <br>
+                    <input id="chambre6.5" type="checkbox" name="6.5" checked>
+                    <label for="chambre6.5">6 1/2+</label>
+                </p>
+                <p>
+                    Meublé
+                    <br>
+                    <input name="meuble" id="meublepeu" type="radio" value="peuimporte" checked>
+                    <label for="meublepeu">Peu importe</label>
+                    <br>
+                    <input name="meuble" id="meubleoui" type="radio" value="oui">
+                    <label for="meubleoui">Oui</label>
+                    <br>
+                    <input name="meuble" id="meublenon" type="radio" value="non">
+                    <label for="meublenon">Non</label>
+                    <br>
+                    <p>
+                        Animaux acceptés
+                        <br>
+                        <input name="animaux" id="animauxpeu" type="radio" value="peuimporte" checked>
+                        <label for="animauxpeu">Peu importe</label>
+                        <br>
+                        <input name="animaux" id="animauxoui" type="radio" value="oui">
+                        <label for="animauxoui">Oui</label>
+                        <br>
+                        <input name="animaux" id="animauxnon" type="radio" value="non">
+                        <label for="animauxnon">Non</label>
+                        <br>
+                    </p>
+                    <p>
+                        <input id="onlyFavorites" name="onlyFavorites" type="checkbox" />
+                        <label for="onlyFavorites">Uniquement mes favoris</label>
+                        <br>
+                        <input id="hideSeen" name="hideSeen" type="checkbox" />
+                        <label for="hideSeen">Cacher vus</label>
+                    </p>
+            </form>
+        </div>
+        <div id="mapContainer"></div>
+    </div>
+</body>
+
+</html>
