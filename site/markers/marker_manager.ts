@@ -1,15 +1,15 @@
-import { Apartment } from '../apartment';
-import { Persister } from '../persister';
+import { Apartment } from "../apartment";
+import { Persister } from "../persister";
 
-import * as L from 'leaflet';
+import * as L from "leaflet";
 
 declare function require(path: string): any;
-const blueIcon = require('./icons/marker-icon-blue.png');
-const yellowIcon = require('./icons/marker-icon-yellow.png');
-const greyIcon = require('./icons/marker-icon-grey.png');
-const shadowIcon = require('./icons/marker-shadow.png');
+const blueIcon = require("./icons/marker-icon-blue.png");
+const yellowIcon = require("./icons/marker-icon-yellow.png");
+const greyIcon = require("./icons/marker-icon-grey.png");
+const shadowIcon = require("./icons/marker-shadow.png");
 
-import { genPopupContent } from './popup';
+import { genPopupContent } from "./popup";
 
 export enum MarkerStatus {
   Default,
@@ -72,7 +72,7 @@ export class MarkerManager {
         icon = greyIcon;
         break;
       default:
-        alert('unreachable in MarkerManager.statusIcon');
+        alert("unreachable in MarkerManager.statusIcon");
     }
 
     return new L.Icon({
