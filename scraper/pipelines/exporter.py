@@ -29,9 +29,12 @@ class ItemCollector:
         self.cities = config["cities"]
         self.ad_types = config["ad_types"]
 
+        city_dicts = list(map(lambda c: c._asdict(), self.cities))
+        ad_dicts = list(map(lambda a: a._asdict(), self.ad_types))
+
         self.export_data = {
-            "cities": self.cities,
-            "ad_types": self.ad_types,
+            "cities": city_dicts,
+            "ad_types": ad_dicts,
             "date_collected": datetime_slug(),
             "data_version": self.version,
             "offers": {},
