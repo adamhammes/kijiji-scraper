@@ -8,6 +8,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "sourceMap": true
   }
 }

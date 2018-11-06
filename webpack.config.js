@@ -7,12 +7,14 @@ const BUILD_DIR = path.resolve(__dirname, "build");
 
 module.exports = {
   entry: path.resolve(__dirname, "site/app.ts"),
+  devtool: "source-map",
   resolve: {
     extensions: [".tsx", ".ts", ".js"]
   },
   output: {
     path: BUILD_DIR,
-    filename: "bundle.js"
+    filename: "bundle.js",
+    publicPath: "/"
   },
   module: {
     rules: [
