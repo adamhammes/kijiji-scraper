@@ -5,8 +5,8 @@ name_english = "Québec"
 id = "quebec"
 kijiji_id ="l1700124"
 kijiji_name ="ville-de-quebec"
-longitude = 46.834872
-latitude = -71.264868
+longitude = -71.264868
+latitude = 46.834872
 radius = 30
 
 [[cities]]
@@ -16,8 +16,8 @@ name_french = "Montréal"
 name_english = "Montreal"
 kijiji_id = "l80002"
 kijiji_name = "grand-montreal"
-longitude = 45.5017
-latitude = -73.5673
+latitude = 45.5017
+longitude = -73.5673
 radius = 30
 
 
