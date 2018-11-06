@@ -1,5 +1,4 @@
 import os
-import shutil
 
 import toml
 from jinja2 import Environment, FileSystemLoader, Template
@@ -41,8 +40,6 @@ def main():
     index_template = jinja_env.get_template("home.html")
     city_template = jinja_env.get_template("city.html")
     listing_template = jinja_env.get_template("listing.html")
-
-    shutil.rmtree(output_directory)
 
     write_template(index_template, "index.html", start_data)
 
