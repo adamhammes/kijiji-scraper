@@ -4,6 +4,7 @@ import os
 
 
 import boto3
+import toml
 
 
 kijiji_output_directory = os.environ["KIJIJI_OUTPUT_DIRECTORY"]
@@ -30,11 +31,14 @@ def download_latest():
 def split():
     output_directory = os.path.join("site", "public")
 
+    with open("scraper/scrape.toml") as f:
+        start_data = toml.load(f)
+
     with open(data_path) as f:
         data = json.load(f)
 
-    for city in data["cities"]:
-        for ad_type in data["ad_types"]:
+    for city in start_data["cities"]:
+        for ad_type in start_data["ad_types"]:
             city_id = city["id"]
             ad_id = ad_type["id"]
 
