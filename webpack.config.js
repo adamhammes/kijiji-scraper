@@ -1,5 +1,6 @@
 const path = require("path");
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WriteFilePlugin = require("write-file-webpack-plugin");
 
@@ -9,7 +10,7 @@ module.exports = {
   entry: path.resolve(__dirname, "site/app.ts"),
   devtool: "source-map",
   resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: [".tsx", ".ts", ".js", ".scss"]
   },
   output: {
     path: BUILD_DIR,
@@ -25,7 +26,9 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ["css-loader", "postcss-loader", "sass-loader"]
+        use: ExtractTextPlugin.extract({
+          use: ["css-loader", "postcss-loader", "sass-loader"]
+        })
       },
       {
         test: /\.(gif|png|jpe?g|svg)$/,
@@ -41,6 +44,7 @@ module.exports = {
         toType: "dir"
       }
     ]),
-    new WriteFilePlugin()
+    new WriteFilePlugin(),
+    new ExtractTextPlugin("styles.css")
   ]
 };
