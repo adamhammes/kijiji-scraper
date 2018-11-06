@@ -9,6 +9,7 @@
     "build": "webpack -p",
     "check": "tsc --noEmit",
     "prettier": "prettier --single-quote --write \"site/**/*.ts\" webpack.config.js",
+    "mini_scrape": "pipenv run scrapy crawl apartments",
     "splitData": "pipenv run python s3.py",
     "template": "pipenv run python template.py"
   },
