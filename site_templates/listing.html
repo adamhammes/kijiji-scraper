@@ -39,6 +39,8 @@
                     à
                     <input type="number" name="maxPrice">
                 </p>
+
+                {% if ad_type.id == 'rent' %}
                 <p>
                     Nombre de pièces
                     <br>
@@ -86,6 +88,8 @@
                     <label for="animauxnon">Non</label>
                     <br>
                 </p>
+                {% endif %}
+
                 <p>
                     <input id="onlyFavorites" name="onlyFavorites" type="checkbox" />
                     <label for="onlyFavorites">Uniquement mes favoris</label>

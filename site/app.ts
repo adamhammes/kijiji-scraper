@@ -7,16 +7,24 @@ declare const L: any;
 
 import { Apartment } from "./apartment";
 import { MarkerManager } from "./markers/marker_manager";
-// import { Filter } from "./filter";
+import { Filter } from "./filter";
 import { Persister } from "./persister";
+
+export enum AdType {
+  rent = "rent",
+  buy = "buy",
+  colocation = "colocation"
+}
 
 const minZoom = 9;
 const defaultZoom = minZoom + 2;
+let adType: AdType;
 let map: any;
 
 function fetchApartments() {
-  const [city, ad_type] = window.location.pathname.split("/").filter(Boolean);
-  const jsonUrl = `/${city}-${ad_type}.json`;
+  const [city, type] = window.location.pathname.split("/").filter(Boolean);
+  adType = <AdType>type;
+  const jsonUrl = `/${city}-${adType}.json`;
 
   fetch(jsonUrl).then(response => response.json().then(loadApartments));
 }
@@ -46,8 +54,8 @@ function loadApartments(data: any) {
   );
   marker_manager.displayAll();
 
-  // const filter = new Filter(apartment_set, marker_manager);
-  // filter.filter();
+  const filter = new Filter(adType, apartment_set, marker_manager);
+  filter.filter();
 }
 
 function main() {

@@ -1,12 +1,13 @@
 import { MarkerManager, MarkerStatus } from './markers/marker_manager';
 import { Apartment } from './apartment';
+import { AdType } from "./app";
 
 interface Filterable {
   (manager: MarkerManager, apartment: Apartment, formData: FormData): boolean;
 }
 
 export class Filter {
-  private filters: Filterable[] = [
+  private allFilters: Filterable[] = [
     priceFilter,
     sizeFilter,
     furnishedFilter,
@@ -15,15 +16,28 @@ export class Filter {
     hideSeenFilter
   ];
 
+  private filtersForAdType = {
+    [AdType.rent]: this.allFilters,
+    [AdType.buy]: [priceFilter, favoritedFilter, hideSeenFilter],
+    [AdType.colocation]: [priceFilter, favoritedFilter, hideSeenFilter]
+  };
+
   private marker_manager: MarkerManager;
   private all_apartments: Set<Apartment>;
   private form: HTMLFormElement;
+  private filters: Filterable[];
 
-  constructor(apartments: Set<Apartment>, marker_manager: MarkerManager) {
+  constructor(
+    adType: AdType,
+    apartments: Set<Apartment>,
+    marker_manager: MarkerManager
+  ) {
     this.marker_manager = marker_manager;
     this.all_apartments = apartments;
 
     this.form = document.querySelector('#settings');
+    this.filters = this.filtersForAdType[adType];
+
 
     const inputs: NodeListOf<HTMLElement> = document.querySelectorAll(
       '#settings input'
