@@ -6,6 +6,8 @@ The program scrapes Kijiji (the local Craigslist equivalent) for apartments on s
 
 User attestations:
 
+> I'm signing a lease today thanks to Kijiji map!
+>
 > Cet outil est incroyablement utile !! Je partage !
 >
 > waouh c'est vraiment génial !!
