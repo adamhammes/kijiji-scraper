@@ -24,6 +24,8 @@ class ApartmentSpider(scrapy.Spider):
     name = "apartments"
     version = 2
 
+    num_results_pages = 1
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -50,6 +52,8 @@ class ApartmentSpider(scrapy.Spider):
             )
 
     def results_page(self, response):
+        logging.debug(f'results page {self.num_results_pages}')
+        self.num_results_pages += 1
         apartment_paths = response.css(".info-container a.title::attr(href)").extract()
 
         if not self.full_scrape:
@@ -62,7 +66,7 @@ class ApartmentSpider(scrapy.Spider):
                 url=full_url, callback=self.apartment_page, meta=meta_with_cache
             )
 
-        next_path = response.css('a[title~="Suivante"]::attr(href)').extract_first()
+        next_path = response.css('[title~="Suivante"]::attr(data-href)').extract_first()
 
         if next_path and self.full_scrape:
             next_url = ApartmentSpider.base_url + next_path
