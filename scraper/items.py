@@ -16,6 +16,7 @@ class Apartment(scrapy.Item):
     raw_date = scrapy.Field()  # nullable
     raw_address = scrapy.Field()
     raw_price = scrapy.Field()
+    raw_rooms = scrapy.Field()
     raw_bathrooms = scrapy.Field()
     raw_furnished = scrapy.Field()
     raw_animals = scrapy.Field()  # nullable
