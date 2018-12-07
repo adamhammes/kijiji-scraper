@@ -69,9 +69,11 @@ def export(value, exporter_name, full_scrape, version):
         f.write(value)
 
     time_path = os.path.join(datetime_slug(), exporter_name)
+    latest_path = os.path.join('latest', exporter_name)
 
     if full_scrape:
         upload_to_s3(time_path, value, version)
+        upload_to_s3(latest_path, value, version)
 
     file_time_path = os.path.join(OUTPUT_DIRECTORY, time_path)
     os.makedirs(os.path.dirname(file_time_path), exist_ok=True)
