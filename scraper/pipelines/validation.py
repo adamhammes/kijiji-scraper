@@ -27,11 +27,10 @@ class ValidationPipeline(object):
         item["date"] = _read_date(item["raw_date"])
         item["price"] = _read_price(item["raw_price"])
 
-        if item["origin"].ad_type.id == "rent":
-            item["num_bathrooms"] = _read_bathrooms(item["raw_bathrooms"])
-            item["is_furnished"] = _read_furnished(item["raw_furnished"])
-            item["allows_animals"] = _read_animals(item["raw_animals"])
-            item["num_rooms"] = _read_num_rooms(item["title"])
+        item["num_bathrooms"] = _read_bathrooms(item["raw_bathrooms"])
+        item["is_furnished"] = _read_furnished(item["raw_furnished"])
+        item["allows_animals"] = _read_animals(item["raw_animals"])
+        item["num_rooms"] = _read_num_rooms(item["title"])
 
         return item
 
