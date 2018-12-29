@@ -25,7 +25,6 @@ class ValidationPipeline(object):
             item.setdefault(key, None)
 
         item["id"] = int(item["raw_id"])
-        item["date"] = _read_date(item["raw_date"])
         item["price"] = _read_price(item["raw_price"])
 
         if item["origin"].ad_type.id == "rent":
@@ -45,14 +44,6 @@ def nullable(func, *args, **kw):
         return func(*args, **kw)
 
     return wrapped
-
-
-@nullable
-def _read_date(raw_date):
-    date_format = "%Y-%m-%dT%H:%M:%S"
-
-    relevant = raw_date.split(".")[0]
-    return datetime.strptime(relevant, date_format)
 
 
 @nullable
@@ -82,7 +73,7 @@ def _read_bathrooms(raw_bathrooms):
 
     val = float(match.group(1))
     if match.group(2) == ",5":
-        val += .5
+        val += 0.5
 
     return val
 

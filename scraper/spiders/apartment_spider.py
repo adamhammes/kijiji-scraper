@@ -52,7 +52,7 @@ class ApartmentSpider(scrapy.Spider):
             )
 
     def results_page(self, response):
-        logging.debug(f'results page {self.num_results_pages}')
+        logging.debug(f"results page {self.num_results_pages}")
         self.num_results_pages += 1
         apartment_paths = response.css(".info-container a.title::attr(href)").extract()
 
@@ -87,7 +87,7 @@ class ApartmentSpider(scrapy.Spider):
         l.add_value("date_accessed", datetime.datetime.now())
 
         l.add_css("raw_id", 'li[class^="currentCrumb"] > span::text')
-        l.add_css("raw_date", 'div[class^="datePosted"] > time::attr(datetime)')
+        l.add_css("date", 'div[class^="datePosted"] > time::attr(datetime)')
         l.add_css("raw_address", "span[class^='address']::text")
         l.add_css("raw_price", 'span[class^="currentPrice"] > span::text')
         l.add_css("raw_rooms", "#AttributeList li:nth-of-type(1) dd::text")

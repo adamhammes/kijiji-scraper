@@ -13,7 +13,6 @@ class Apartment(scrapy.Item):
 
     # Unvalidated/unprocessed
     raw_id = scrapy.Field()
-    raw_date = scrapy.Field()  # nullable
     raw_address = scrapy.Field()
     raw_price = scrapy.Field()
     raw_rooms = scrapy.Field()
